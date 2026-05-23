@@ -81,31 +81,39 @@ interface TextInput {
  */
 interface Item {
   /** The title of the item, usually the name of the article or a post. */
-  title?: string;
+  title?: string | null;
 
   /** The canonical URL where the full content of the item can be accessed. */
-  link?: string | URL;
+  link?: string | URL | null;
 
   /** A short summary or description of the item. */
-  description?: string;
+  description?: string | null;
 
   /**
    * The author of the item, typically formatted as `email (Name)` but the
    * formats can vary.
    */
-  author?: string;
+  author?: string | null;
 
   /** A category or tag describing the topic of the item. */
-  category?: string;
+  category?: string | null;
 
   /** A link to the comments page or discussion thread related to the item. */
-  comments?: string | URL;
+  comments?: string | URL | null;
 
   // enclosure?: string
-  // guid?: string;
+
+  /**
+   * A string that uniquely identifies the item. Typically the canonical URL of
+   * the item, but any opaque identifier is allowed by the RSS 2.0
+   * specification.
+   *
+   * @see https://www.rssboard.org/rss-specification#ltguidgtSubelementOfLtitemgt
+   */
+  guid?: string | null;
 
   /** The publication date for the item. */
-  pubDate: Date;
+  pubDate?: Date | null;
 
   // source?: string | URL
 }

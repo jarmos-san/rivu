@@ -64,16 +64,13 @@ export class Feed implements RSS {
    * empty tags.
    *
    * @param doc - The current XML builder node to append the new element to.
-   * @param name - The XML element name, corresponding to a key in
-   * `ChannelElements`.
+   * @param name - The XML element name. Used for both `<channel>`-level
+   * metadata and `<item>`-level subelements, so it is not constrained to a
+   * specific key set.
    * @param value - The value to serialize into the the element text content.
    * If `undefined` or `null`, no element will be created.
    */
-  private build(
-    doc: XMLBuilder,
-    name: keyof ChannelElements,
-    value: unknown,
-  ): void {
+  private build(doc: XMLBuilder, name: string, value: unknown): void {
     if (value === undefined || value === null) return;
     doc.ele(name).dat(String(value)).up();
   }
@@ -178,7 +175,13 @@ export class Feed implements RSS {
 
       // Build the children for the `<item>` node
       this.build(itemEl, "title", item.title);
+      this.build(itemEl, "link", item.link);
       this.build(itemEl, "description", item.description);
+      this.build(itemEl, "author", item.author);
+      this.build(itemEl, "category", item.category);
+      this.build(itemEl, "comments", item.comments);
+      this.build(itemEl, "guid", item.guid);
+      this.build(itemEl, "pubDate", this.formatDate(item.pubDate));
     }
   }
 
