@@ -43,7 +43,7 @@ importers:
         specifier: ^0.39.2
         version: 0.39.2(astro@6.4.2(@types/node@25.1.0)(rollup@4.60.4))(typescript@5.9.3)
       astro:
-        specifier: ^6.3.7
+        specifier: ^6.4.2
         version: 6.4.2(@types/node@25.1.0)(rollup@4.60.4)
       sharp:
         specifier: ^0.34.5
