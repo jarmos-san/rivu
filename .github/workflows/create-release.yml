@@ -128,6 +128,18 @@ jobs:
         run: |
           pnpm config set '//registry.npmjs.org/:_authToken' "${NODE_AUTH_TOKEN}"
           pnpm config set '//registry.npmjs.org/:always-auth' true
+          pnpm whoami
+
+      - name: Verify tag matches package version
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+
+          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
+            echo "Tag version ($TAG_VERSION) does not match package.json version \
+                  ($PACKAGE_VERSION)"
+            exit 1
+          fi
 
       - name: Publish the Package
-        run: pnpm publish --tag "latest" --access public --no-git-checks
+        run: pnpm publish --access public --no-git-checks
