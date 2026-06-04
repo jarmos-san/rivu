@@ -130,4 +130,6 @@ jobs:
           pnpm config set '//registry.npmjs.org/:always-auth' true
 
       - name: Publish the Package
-        run: pnpm publish --tag "latest" --access public --no-git-checks
+        env:
+          TAG: "${{ github.ref_name }}"
+        run: pnpm publish --tag "$TAG" --access public --no-git-checks
