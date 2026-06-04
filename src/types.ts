@@ -79,7 +79,7 @@ interface TextInput {
  * but the implementation should at least contain either a title or a
  * description.
  */
-interface Item {
+export interface ItemElements {
   /** The title of the item, usually the name of the article or a post. */
   title?: string | null;
 
@@ -203,7 +203,7 @@ export interface ChannelElements {
    * entry is represented by an `<item>` element describing an article, update
    * or meaningful piece of content.
    */
-  items: Item[];
+  items: ItemElements[];
 }
 
 /**

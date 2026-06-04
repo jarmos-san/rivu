@@ -1,4 +1,4 @@
-import type { ChannelElements, RSS } from "./types.ts";
+import type { ChannelElements, ItemElements, RSS } from "./types.ts";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 import { create } from "xmlbuilder2";
 
@@ -64,13 +64,17 @@ export class Feed implements RSS {
    * empty tags.
    *
    * @param doc - The current XML builder node to append the new element to.
-   * @param name - The XML element name. Used for both `<channel>`-level
-   * metadata and `<item>`-level subelements, so it is not constrained to a
-   * specific key set.
+   * @param name - The XML element name, restricted to a key declared on either
+   * {@link ChannelElements} or {@link ItemElements} so only RSS 2.0 sanctioned
+   * tags can be emitted.
    * @param value - The value to serialize into the the element text content.
    * If `undefined` or `null`, no element will be created.
    */
-  private build(doc: XMLBuilder, name: string, value: unknown): void {
+  private build(
+    doc: XMLBuilder,
+    name: keyof ChannelElements | keyof ItemElements,
+    value: unknown,
+  ): void {
     if (value === undefined || value === null) return;
     doc.ele(name).dat(String(value)).up();
   }
