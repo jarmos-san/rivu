@@ -4,6 +4,10 @@ on:
   push:
     tags: ["v*.*.*"]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   run-eslint:
     name: Run ESLint
@@ -112,6 +116,7 @@ jobs:
         uses: actions/setup-node@v6.0.0
         with:
           node-version: "25.x"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.2.0
@@ -121,25 +126,6 @@ jobs:
 
       - name: Build the Package
         run: pnpm build
-
-      - name: Set the Publishing Config
-        env:
-          NODE_AUTH_TOKEN: "${{ secrets.NODE_AUTH_TOKEN }}"
-        run: |
-          pnpm config set '//registry.npmjs.org/:_authToken' "${NODE_AUTH_TOKEN}"
-          pnpm config set '//registry.npmjs.org/:always-auth' true
-          pnpm whoami
-
-      - name: Verify tag matches package version
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-
-          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
-            echo "Tag version ($TAG_VERSION) does not match package.json version \
-                  ($PACKAGE_VERSION)"
-            exit 1
-          fi
 
       - name: Publish the Package
         run: pnpm publish --access public --no-git-checks
