@@ -54,11 +54,8 @@ tasks:
     summary: |
       Run code quality checks.
 
-      This command will run ESLint and Prettier on the source code to enforce a uniform
+      This command will run Oxlint and Oxfmt on the source code to enforce a uniform
       coding standard across the entire source code.
-
-      NOTE: The commands are run sequentially, hence ESLint will ALWAYS run before
-      Prettier.
     cmds:
       - pnpm lint
       - pnpm format
