@@ -5,7 +5,7 @@
  *
  * @see https://www.rssboard.org/rss-specification#skipDays
  */
-export type Days =
+type Days =
   | "Sunday"
   | "Monday"
   | "Tuesday"
@@ -22,7 +22,8 @@ export type Days =
  *
  * @see https://www.rssboard.org/rss-specification#skipHours
  */
-export type Hour =
+type Hour =
+  // oxlint-disable eslint/no-magic-numbers
   | 0
   | 1
   | 2
@@ -73,7 +74,7 @@ interface TextInput {
  * podcast episode or update. All the fields are optional but the implementation
  * should at least contain either a title or a description.
  */
-export interface ItemElements {
+interface ItemElements {
   /** @description The title of the item, usually the name of the article or a post. */
   title?: string | null;
 
@@ -95,7 +96,7 @@ export interface ItemElements {
   /** @description A link to the comments page or discussion thread related to the item. */
   comments?: string | URL | null;
 
-  // enclosure?: string
+  // Enclosure?: string
 
   /**
    * @description A string that uniquely identifies the item. Typically the canonical URL of
@@ -109,7 +110,7 @@ export interface ItemElements {
   /** @description The publication date for the item. */
   pubDate?: Date | null;
 
-  // source?: string | URL
+  // Source?: string | URL
 }
 
 /**
@@ -118,7 +119,7 @@ export interface ItemElements {
  * metadata and extended metadata such as skip rules and text input
  * information.
  */
-export interface ChannelElements {
+interface ChannelElements {
   /** @description The name of the feed, often the site name or the publication title. */
   title: string;
 
@@ -159,7 +160,7 @@ export interface ChannelElements {
   docs?: "https://www.rssboard.org/rss-specification" | null;
 
   // TODO: Implement this metadata, refer to docs before doing so.
-  // cloud?: any
+  // Cloud?: any
 
   /** @description The number of minutes a feed can be cached before refreshing it. */
   ttl?: number | null;
@@ -171,7 +172,7 @@ export interface ChannelElements {
   image?: URL | string | null;
 
   // TODO: Implement this metadata, refer to the docs before doing so.
-  // rating?: any
+  // Rating?: any
 
   /** @description Defines an embedded text input interface inside RSS-capable clients. */
   textInput?: TextInput | null;
@@ -209,11 +210,13 @@ export interface ChannelElements {
  *
  * @see https://www.rssboard.org/rss-specification#requiredChannelElements
  */
-export interface RSS {
+interface RSS {
   /**
    * @description Generates the RSS feed as a serialised XML string.
    *
    * @returns A serialised RSS 2.0 XML document as a UTF-8 string.
    */
-  generate(): string;
+  generate: () => string;
 }
+
+export type { Days, Hour, ItemElements, ChannelElements, RSS };
