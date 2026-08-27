@@ -45,12 +45,12 @@
   "license": "MIT",
   "type": "module",
   "devDependencies": {
-    "@types/node": "^25.0.0",
+    "@types/node": "^25.9.5",
     "@vitest/coverage-v8": "^4.0.7",
     "oxfmt": "latest",
     "oxlint": "latest",
     "oxlint-tsgolint": "latest",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "vitest": "^4.0.3"
   },
   "dependencies": {
