@@ -9,7 +9,7 @@ import type { ChannelElements, ItemElements, RSS } from "./types.ts";
  * such as `title`, `link` and `description`, as well as optional metadata like
  * publication dates, editor information and fetch/skip rules.
  */
-export class Feed implements RSS {
+class Feed implements RSS {
   /**
    * @description The RSS `<channel>` metadata used to describe the feed. This value is
    * supplied when constructing the `RSS` instance and is stored without
@@ -68,9 +68,11 @@ export class Feed implements RSS {
   private build(
     doc: XMLBuilder,
     name: keyof ChannelElements | keyof ItemElements,
-    value: unknown,
+    value: URL | string | number | boolean | undefined | null,
   ): void {
-    if (value === undefined || value === null) return;
+    if (value === undefined || value === null) {
+      return;
+    }
     doc.ele(name).dat(String(value)).up();
   }
 
@@ -91,6 +93,7 @@ export class Feed implements RSS {
    * @param document - The XML node representing the `<channel>` element to
    *   which metadata elements shoulld be appended.
    */
+  // oxlint-disable-next-line eslint/max-statements
   private addChannelEl(document: XMLBuilder): void {
     // Required elements (title, link and description)
     // The title of the channel
@@ -116,7 +119,7 @@ export class Feed implements RSS {
     this.build(document, "webMaster", this.channelElements.webMaster);
 
     // The publication date of the feed (usually defaults to the last published
-    // item)
+    // Item)
     this.build(
       document,
       "pubDate",
@@ -143,7 +146,7 @@ export class Feed implements RSS {
     this.build(document, "ttl", this.channelElements.ttl);
 
     // TODO: The following elements require some more logic to be handled. Also
-    // the `textInput` field is missing and needs to be added here
+    // The `textInput` field is missing and needs to be added here
     this.build(document, "image", this.channelElements.image);
     this.build(document, "skipHours", this.channelElements.skipHours);
     this.build(document, "skipDays", this.channelElements.skipDays);
@@ -158,9 +161,12 @@ export class Feed implements RSS {
    * @param channel - The `<channel>` XML node into which `<item>` elements
    *   should be inserted.
    */
+  // oxlint-disable-next-line eslint/max-statements
   private addItems(channel: XMLBuilder): void {
     // Stop execution if no items were passed
-    if (!Array.isArray(this.channelElements.items)) return;
+    if (!Array.isArray(this.channelElements.items)) {
+      return;
+    }
 
     for (const item of this.channelElements.items) {
       // Add the `<item>` node to a parent `<channel>` node
@@ -205,11 +211,10 @@ export class Feed implements RSS {
    */
   generate(): string {
     // The XML document along with the root node (named `<rss>`)
-    const document = create({ version: "1.0" }).ele("rss", { version: "2.0" });
-
-    // The `<channel>` node which consists of various metadata and item child
-    // elements
-    const channel = document.ele("channel");
+    const document = create({ version: "1.0" }).ele("rss", { version: "2.0" }),
+      // The `<channel>` node which consists of various metadata and item child
+      // Elements
+      channel = document.ele("channel");
 
     // Build the `<channel>` and its child `<item>` nodes
     this.addChannelEl(channel);
@@ -219,3 +224,5 @@ export class Feed implements RSS {
     return document.end({ prettyPrint: true });
   }
 }
+
+export default Feed;
