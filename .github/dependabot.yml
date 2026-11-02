@@ -33,3 +33,18 @@ updates:
     groups:
       docs:
         patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      time: "06:00"
+      timezone: Asia/Kolkata
+    commit-message:
+      prefix: "chore(github-actions)"
+    labels:
+      - dependencies
+      - github-actions
+    groups:
+      ci:
+        patterns: ["*"]
