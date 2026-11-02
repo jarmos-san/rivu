@@ -61,7 +61,7 @@ tasks:
       Prettier.
     cmds:
       - pnpm lint
-      - pnpm format
+      - pnpm fmt
 
   build:
     desc: Build and compile the package.

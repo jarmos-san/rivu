@@ -1,9 +1,10 @@
-import type { ChannelElements, ItemElements, RSS } from "./types.ts";
-import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 import { create } from "xmlbuilder2";
+import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
+
+import type { ChannelElements, ItemElements, RSS } from "./types.ts";
 
 /**
- * Represents an RSS feed generator instance.
+ * @description Represents an RSS feed generator instance.
  *
  * The `RSS` class stores channel-level metadata which describes the feed,
  * including required fields such as `title`, `link` and `description`, as well
@@ -12,7 +13,7 @@ import { create } from "xmlbuilder2";
  */
 export class Feed implements RSS {
   /**
-   * The RSS `<channel>` metadata used to describe the feed.
+   * @description The RSS `<channel>` metadata used to describe the feed.
    *
    * This value is supplied when constructing the `RSS` instance and is stored
    * without modification. It is expected that validation, normalization or
@@ -22,19 +23,21 @@ export class Feed implements RSS {
   private readonly channelElements: ChannelElements;
 
   /**
-   * Creates a new `RSS` feed instance with the provided channel metadata.
+   * @description Creates a new `RSS` feed instance with the provided channel
+   * metadata.
    *
    * @param channelElements - The mmetadata describing the RSS channel. This
-   * must include the required properties defined in {@link ChannelElements},
-   * such as `title`, `link` and `description`. The optional fields may also be
-   * provided to supply extended metadata.
+   *   must include the required properties defined in {@link ChannelElements},
+   *   such as `title`, `link` and `description`. The optional fields may also
+   *   be provided to supply extended metadata.
    */
   constructor(channelElements: ChannelElements) {
     this.channelElements = channelElements;
   }
 
   /**
-   * Converts a JavaScript `Date` object into a valid RSS-approved date string.
+   * @description Converts a JavaScript `Date` object into a valid RSS-approved
+   * date string.
    *
    * RSS 2.0 requires the date values to be formatted using the RFC 1123 format
    * which is achieved via the `Date.prototype.toUTCString()` method. If the
@@ -43,32 +46,32 @@ export class Feed implements RSS {
    * rendered XML output.
    *
    * @param date - The date value format. Maybe a `Date` object, `null` or
-   * `undefined`.
+   *   `undefined`.
    *
    * @returns A UTC-formatted date string if `date` is a valid `Date` instance,
-   * otherwise it is undefined allowing the caller to skip serialization.
+   *   otherwise it is undefined allowing the caller to skip serialization.
    */
   private formatDate(date?: Date | null): string | undefined {
     return date instanceof Date ? date.toUTCString() : undefined;
   }
 
   /**
-   * Conditionally appends an XML element to the provided builder.
+   * @description Conditionally appends an XML element to the provided builder.
    *
    * This helper method avoids repititive null and undefined checks when
    * serializing channel or item fields. If the supplied `value` is defined, a
-   * new XML element named `name` is created under `doc` and its text content
-   * is set to the string representation of `value`. If the `value` is
-   * `undefined` or `null`, the method performs no action, ensuring that RSS
-   * fields are omitted entirely from the final output rather than appearing as
-   * empty tags.
+   * new XML element named `name` is created under `doc` and its text content is
+   * set to the string representation of `value`. If the `value` is `undefined`
+   * or `null`, the method performs no action, ensuring that RSS fields are
+   * omitted entirely from the final output rather than appearing as empty
+   * tags.
    *
    * @param doc - The current XML builder node to append the new element to.
    * @param name - The XML element name, restricted to a key declared on either
-   * {@link ChannelElements} or {@link ItemElements} so only RSS 2.0 sanctioned
-   * tags can be emitted.
-   * @param value - The value to serialize into the the element text content.
-   * If `undefined` or `null`, no element will be created.
+   *   {@link ChannelElements} or {@link ItemElements} so only RSS 2.0
+   *   sanctioned tags can be emitted.
+   * @param value - The value to serialize into the the element text content. If
+   *   `undefined` or `null`, no element will be created.
    */
   private build(
     doc: XMLBuilder,
@@ -80,13 +83,14 @@ export class Feed implements RSS {
   }
 
   /**
-   * Appends all `<channel>`-level metadata elements to the XML document.
+   * @description Appends all `<channel>`-level metadata elements to the XML
+   * document.
    *
-   * This method serializes both required and optional RSS channel fields
-   * stored in `channelElements`. Required properties (`title`, `link` and
+   * This method serializes both required and optional RSS channel fields stored
+   * in `channelElements`. Required properties (`title`, `link` and
    * `description`) are always included while optional fields are only added if
-   * they contain a value preventing empty or placeholder tags from rendering
-   * in the XML output.
+   * they contain a value preventing empty or placeholder tags from rendering in
+   * the XML output.
    *
    * Date-based fields (`pubDate` and `lastBuildDate`) are formatted to the RFC
    * 1123 standard using {@link formatDate} before serialization as required by
@@ -98,7 +102,7 @@ export class Feed implements RSS {
    * currently require further logic and will be extended in future updates.
    *
    * @param document - The XML node representing the `<channel>` element to
-   * which metadata elements shoulld be appended.
+   *   which metadata elements shoulld be appended.
    */
   private addChannelEl(document: XMLBuilder): void {
     // Required elements (title, link and description)
@@ -159,15 +163,15 @@ export class Feed implements RSS {
   }
 
   /**
-   * Serializes all `<item>` elements within the RSS feed and appends them to
-   * the `<channel>` element.
+   * @description Serializes all `<item>` elements within the RSS feed and
+   * appends them to the `<channel>` element.
    *
    * If the feed doees not define any items or if `items` is not an array, this
    * method performs no action. Each item in the list is mapped to its own
    * `<item>` element under the `<channel>` node.
    *
    * @param channel - The `<channel>` XML node into which `<item>` elements
-   * should be inserted.
+   *   should be inserted.
    */
   private addItems(channel: XMLBuilder): void {
     // Stop execution if no items were passed
@@ -190,7 +194,8 @@ export class Feed implements RSS {
   }
 
   /**
-   * Generates an RSS 2.0 compliant XML string representation of the feed.
+   * @description Generates an RSS 2.0 compliant XML string representation of
+   * the feed.
    *
    * This method constructs the `<rss>` and `<channel>` elements and then
    * populates them using the metadata stored in {@link channelElements}. All
@@ -203,19 +208,19 @@ export class Feed implements RSS {
    * values are silently skipped, ensuring a clean and standards-compliant RSS
    * output with no empty tags.
    *
-   * @returns A formatted RSS feed XML string.
-   *
    * @example
-   * ```ts
-   * const feed = new Feed({
-   *   title: "My Blog",
-   *   link: "https://example.com",
-   *   description: "Latest updates"
-   * });
+   *   ```ts
+   *   const feed = new Feed({
+   *     title: "My Blog",
+   *     link: "https://example.com",
+   *     description: "Latest updates",
+   *   });
    *
-   * const xml = feed.generate();
-   * console.log(xml);
-   * ```
+   *   const xml = feed.generate();
+   *   console.log(xml);
+   *   ```;
+   *
+   * @returns A formatted RSS feed XML string.
    */
   generate(): string {
     // The XML document along with the root node (named `<rss>`)

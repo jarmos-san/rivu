@@ -1,5 +1,4 @@
 import tseslint from "typescript-eslint";
-import prettierConfig from "eslint-config-prettier";
 
 export default [
   { ignores: ["coverage/**"] },
@@ -21,7 +20,4 @@ export default [
       "@typescript-eslint/no-unused-vars": ["warn"],
     },
   },
-
-  // Disable stylistic rules that conflict with Prettier formatting
-  prettierConfig,
 ];

@@ -19,17 +19,10 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4.1.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4.4.0
+        uses: pnpm/setup@v3.1.2
         with:
-          node-version: 25
-          cache: "pnpm"
-          cache-dependency-path: "./pnpm-lock.yaml"
-
-      - name: Install the Dependencies
-        run: pnpm install --frozen-lockfile
+          cache: true
+          require-lockfile: true
 
       - name: Run Vitest
         run: pnpm test
