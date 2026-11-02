@@ -13,7 +13,8 @@ body:
     id: feature-request
     attributes:
       label: Feature details?
-      description: Tell u in detail about the feature you would like to see implemented?
+      description:
+        Tell u in detail about the feature you would like to see implemented?
       placeholder:
         Explain in detail about the feature you would like to see implemented.
         Do include code snippets & examples if required!
