@@ -5,8 +5,8 @@ on:
     tags: ["v*.*.*-alpha"]
 
 jobs:
-  run-eslint:
-    name: Run ESLint
+  run-oxlint:
+    name: Run Oxlint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
@@ -18,7 +18,7 @@ jobs:
           cache: true
           require-lockfile: true
 
-      - name: Run ESLint
+      - name: Run Oxlint
         run: pnpm lint
 
   run-oxfmt:
@@ -59,8 +59,8 @@ jobs:
     permissions:
       contents: write
     needs:
-      - run-eslint
-      - run-prettier
+      - run-oxlint
+      - run-oxfmt
       - run-tests
     steps:
       - name: Checkout Repository
