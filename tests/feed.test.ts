@@ -5,10 +5,10 @@ import { Feed } from "../src/index.ts";
 describe("Feed.generate()", () => {
   it("generates required fields wrapped in CDATA", () => {
     const feed = new Feed({
-      title: "My Blog",
-      link: "https://example.com",
       description: "Latest updates",
       items: [],
+      link: "https://example.com",
+      title: "My Blog",
     });
 
     const xml = feed.generate();
@@ -26,12 +26,12 @@ describe("Feed.generate()", () => {
 
   it("omits null and undefined optional fields", () => {
     const feed = new Feed({
-      title: "Test",
-      link: "https://example.com",
       description: "Test feed",
-      language: null,
       generator: undefined,
       items: [],
+      language: null,
+      link: "https://example.com",
+      title: "Test",
     });
 
     const xml = feed.generate();
@@ -42,13 +42,13 @@ describe("Feed.generate()", () => {
 
   it("includes optional fields with CDATA", () => {
     const feed = new Feed({
-      title: "Feed",
-      link: "https://example.com",
-      description: "Desc",
-      language: "en",
-      generator: "Rivu",
       category: "Tech",
+      description: "Desc",
+      generator: "Rivu",
       items: [],
+      language: "en",
+      link: "https://example.com",
+      title: "Feed",
     });
 
     const xml = feed.generate();
@@ -60,12 +60,12 @@ describe("Feed.generate()", () => {
 
   it("omits date fields when not valid Date instance", () => {
     const feed = new Feed({
-      title: "Invalid dates",
-      link: "https://example.com",
       description: "Null dates",
-      pubDate: null,
-      lastBuildDate: undefined,
       items: [],
+      lastBuildDate: undefined,
+      link: "https://example.com",
+      pubDate: null,
+      title: "Invalid dates",
     });
 
     const xml = feed.generate();
@@ -76,16 +76,16 @@ describe("Feed.generate()", () => {
 
   it("includes items wrapped in CDATA when provided", () => {
     const feed = new Feed({
-      title: "Feed With Items",
-      link: "https://example.com",
       description: "Has items",
       items: [
         {
-          title: "Item One",
           description: "Description for item",
           pubDate: new Date("2025-10-10"),
+          title: "Item One",
         },
       ],
+      link: "https://example.com",
+      title: "Feed With Items",
     });
 
     const xml = feed.generate();
@@ -100,21 +100,21 @@ describe("Feed.generate()", () => {
 
   it("serializes all declared item subelements", () => {
     const feed = new Feed({
-      title: "Full Item Fields",
-      link: "https://example.com",
       description: "Testing items",
       items: [
         {
-          title: "Item Title",
-          link: "https://example.com/post-1",
-          description: "Item Desc",
           author: "author@example.com (Author Name)",
           category: "Tech",
           comments: "https://example.com/post-1#comments",
+          description: "Item Desc",
           guid: "https://example.com/post-1",
+          link: "https://example.com/post-1",
           pubDate: new Date("2025-10-10T00:00:00Z"),
+          title: "Item Title",
         },
       ],
+      link: "https://example.com",
+      title: "Full Item Fields",
     });
 
     const xml = feed.generate();
@@ -142,28 +142,28 @@ describe("Feed.generate()", () => {
 
   it("omits item subelements when null or undefined", () => {
     const feed = new Feed({
-      title: "Sparse Item",
-      link: "https://example.com",
       description: "Testing items",
       items: [
         {
-          title: "Only Title",
-          link: undefined,
           author: null,
           category: undefined,
           comments: null,
           guid: undefined,
+          link: undefined,
           pubDate: null,
+          title: "Only Title",
         },
       ],
+      link: "https://example.com",
+      title: "Sparse Item",
     });
 
     const xml = feed.generate();
 
     // Scope omission assertions to the `<item>` block to avoid colliding with
-    // channel-level fields like `<link>` and `<pubDate>` that share the same
-    // tag names.
-    const itemMatch = xml.match(/<item>([\s\S]*?)<\/item>/);
+    // Channel-level fields like `<link>` and `<pubDate>` that share the same
+    // Tag names.
+    const itemMatch = /<item>([\s\S]*?)<\/item>/.exec(xml);
     expect(itemMatch).not.toBeNull();
     const itemBlock = itemMatch![1];
 
@@ -178,15 +178,15 @@ describe("Feed.generate()", () => {
 
   it("omits item pubDate when not a valid Date instance", () => {
     const feed = new Feed({
-      title: "Bad item pubDate",
-      link: "https://example.com",
       description: "Testing items",
       items: [
         {
-          title: "Item",
           pubDate: "not a date" as unknown as Date,
+          title: "Item",
         },
       ],
+      link: "https://example.com",
+      title: "Bad item pubDate",
     });
 
     const xml = feed.generate();
@@ -197,16 +197,16 @@ describe("Feed.generate()", () => {
 
   it("URL objects on item link and comments serialize to their href", () => {
     const feed = new Feed({
-      title: "URL fields",
-      link: "https://example.com",
       description: "Testing items",
       items: [
         {
-          title: "Item",
-          link: new URL("https://example.com/post"),
           comments: new URL("https://example.com/post#comments"),
+          link: new URL("https://example.com/post"),
+          title: "Item",
         },
       ],
+      link: "https://example.com",
+      title: "URL fields",
     });
 
     const xml = feed.generate();
@@ -219,15 +219,15 @@ describe("Feed.generate()", () => {
 
   it("produces pretty printed XML", () => {
     const feed = new Feed({
-      title: "Pretty",
-      link: "https://example.com",
       description: "Test pretty",
       items: [],
+      link: "https://example.com",
+      title: "Pretty",
     });
 
     const xml = feed.generate();
 
-    // still validating pretty-printing behavior
+    // Still validating pretty-printing behavior
     expect(xml).toMatch(/\n\s*<channel>/);
   });
 });

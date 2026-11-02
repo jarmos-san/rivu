@@ -1,28 +1,28 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
+  cacheDir: process.env.VITEST ? "./.vitest" : undefined,
   test: {
-    globals: true,
-    environment: "node",
-    watch: false,
+    bail: process.env.CI ? 3 : undefined,
     coverage: {
       enabled: true,
-      provider: "v8",
       exclude: ["**/index.ts"],
+      provider: "v8",
     },
-    silent: "passed-only",
-    sequence: {
-      concurrent: true,
-    },
-    typecheck: {
-      enabled: true,
-    },
-    bail: process.env.CI ? 3 : undefined,
-    retry: process.env.CI ? 3 : 0,
+    environment: "node",
+    globals: true,
     printConsoleTrace: process.env.CI ? true : false,
     reporters: process.env.GITHUB_ACTIONS
       ? ["dot", "github-actions"]
       : "default",
+    retry: process.env.CI ? 3 : 0,
+    sequence: {
+      concurrent: true,
+    },
+    silent: "passed-only",
+    typecheck: {
+      enabled: true,
+    },
+    watch: false,
   },
-  cacheDir: process.env.VITEST ? "./.vitest" : undefined,
 });

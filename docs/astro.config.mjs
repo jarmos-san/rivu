@@ -4,11 +4,14 @@ import starlight from "@astrojs/starlight";
 import starlightThemeRapide from "starlight-theme-rapide";
 
 export default defineConfig({
-  site: "https://rivu.jarmos.dev",
   integrations: [
     starlight({
       plugins: [starlightThemeRapide()],
-      title: "Rivu",
+      sidebar: [
+        { label: "Get Started", slug: "get-started" },
+        { label: "API Reference", slug: "api-reference" },
+        { label: "Contributing Guidelines", slug: "contributing-guidelines" },
+      ],
       social: [
         {
           icon: "github",
@@ -16,11 +19,8 @@ export default defineConfig({
           href: "https://github.com/Jarmos-san/rivu",
         },
       ],
-      sidebar: [
-        { label: "Get Started", slug: "get-started" },
-        { label: "API Reference", slug: "api-reference" },
-        { label: "Contributing Guidelines", slug: "contributing-guidelines" },
-      ],
+      title: "Rivu",
     }),
   ],
+  site: "https://rivu.jarmos.dev",
 });

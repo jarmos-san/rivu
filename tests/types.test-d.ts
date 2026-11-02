@@ -62,14 +62,14 @@ describe("src/types.ts:Hour", () => {
 describe("ChannelElements", () => {
   it("requires title, link, description, and items", () => {
     const valid: ChannelElements = {
-      title: "Example Feed",
-      link: "https://example.com",
       description: "My feed",
       items: [
         {
           pubDate: new Date(),
         },
       ],
+      link: "https://example.com",
+      title: "Example Feed",
     };
     void valid;
   });
@@ -82,18 +82,18 @@ describe("ChannelElements", () => {
 
   it("validates optional skipDays + skipHours and textInput", () => {
     const withOptional: ChannelElements = {
-      title: "Example",
-      link: "https://example.com",
       description: "Test",
       items: [],
+      link: "https://example.com",
       skipDays: "Sunday",
       skipHours: 12,
       textInput: {
-        title: "Search",
         description: "Search the feed",
-        name: "q",
         link: new URL("https://example.com/search"),
+        name: "q",
+        title: "Search",
       },
+      title: "Example",
     };
     void withOptional;
   });
@@ -103,10 +103,10 @@ describe("RSS", () => {
   it("requires channelElements and generate()", () => {
     const feed: RSS = {
       channelElements: {
-        title: "Example",
-        link: "https://example.com",
         description: "desc",
         items: [{ pubDate: new Date() }],
+        link: "https://example.com",
+        title: "Example",
       },
       generate() {
         return "<rss></rss>";
