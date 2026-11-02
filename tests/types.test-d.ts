@@ -1,6 +1,6 @@
 import { describe, expectTypeOf, it } from "vitest";
 
-import type { Days, ChannelElements, RSS, Hour } from "../src/types.ts";
+import type { ChannelElements, Days, Hour, RSS } from "../src/types.ts";
 
 describe("src/types.ts:Days", () => {
   it("accepts valid day strings", () => {
@@ -59,17 +59,17 @@ describe("src/types.ts:Hour", () => {
   });
 });
 
-describe("ChannelElements", () => {
+describe("channelElements", () => {
   it("requires title, link, description, and items", () => {
     const valid: ChannelElements = {
-      title: "Example Feed",
-      link: "https://example.com",
       description: "My feed",
       items: [
         {
           pubDate: new Date(),
         },
       ],
+      link: "https://example.com",
+      title: "Example Feed",
     };
     void valid;
   });
@@ -82,31 +82,31 @@ describe("ChannelElements", () => {
 
   it("validates optional skipDays + skipHours and textInput", () => {
     const withOptional: ChannelElements = {
-      title: "Example",
-      link: "https://example.com",
       description: "Test",
       items: [],
+      link: "https://example.com",
       skipDays: "Sunday",
       skipHours: 12,
       textInput: {
-        title: "Search",
         description: "Search the feed",
-        name: "q",
         link: new URL("https://example.com/search"),
+        name: "q",
+        title: "Search",
       },
+      title: "Example",
     };
     void withOptional;
   });
 });
 
-describe("RSS", () => {
+describe("rSS", () => {
   it("requires channelElements and generate()", () => {
     const feed: RSS = {
       channelElements: {
-        title: "Example",
-        link: "https://example.com",
         description: "desc",
         items: [{ pubDate: new Date() }],
+        link: "https://example.com",
+        title: "Example",
       },
       generate() {
         return "<rss></rss>";

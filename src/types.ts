@@ -111,7 +111,7 @@ export interface ItemElements {
    */
   comments?: string | URL | null;
 
-  // enclosure?: string
+  // Enclosure?: string
 
   /**
    * @description A string that uniquely identifies the item. Typically the
@@ -125,7 +125,7 @@ export interface ItemElements {
   /** @description The publication date for the item. */
   pubDate?: Date | null;
 
-  // source?: string | URL
+  // Source?: string | URL
 }
 
 /**
@@ -188,7 +188,7 @@ export interface ChannelElements {
   docs?: "https://www.rssboard.org/rss-specification" | null;
 
   // TODO: Implement this metadata, refer to docs before doing so.
-  // cloud?: any
+  // Cloud?: any
 
   /**
    * @description The number of minutes a feed can be cached before refreshing
@@ -203,7 +203,7 @@ export interface ChannelElements {
   image?: URL | string | null;
 
   // TODO: Implement this metadata, refer to the docs before doing so.
-  // rating?: any
+  // Rating?: any
 
   /**
    * @description Defines an embedded text input interface inside RSS-capable

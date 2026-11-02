@@ -78,7 +78,7 @@ export class Feed implements RSS {
     name: keyof ChannelElements | keyof ItemElements,
     value: unknown,
   ): void {
-    if (value === undefined || value === null) return;
+    if (value === undefined || value === null) {return;}
     doc.ele(name).dat(String(value)).up();
   }
 
@@ -129,7 +129,7 @@ export class Feed implements RSS {
     this.build(document, "webMaster", this.channelElements.webMaster);
 
     // The publication date of the feed (usually defaults to the last published
-    // item)
+    // Item)
     this.build(
       document,
       "pubDate",
@@ -156,7 +156,7 @@ export class Feed implements RSS {
     this.build(document, "ttl", this.channelElements.ttl);
 
     // TODO: The following elements require some more logic to be handled. Also
-    // the `textInput` field is missing and needs to be added here
+    // The `textInput` field is missing and needs to be added here
     this.build(document, "image", this.channelElements.image);
     this.build(document, "skipHours", this.channelElements.skipHours);
     this.build(document, "skipDays", this.channelElements.skipDays);
@@ -175,7 +175,7 @@ export class Feed implements RSS {
    */
   private addItems(channel: XMLBuilder): void {
     // Stop execution if no items were passed
-    if (!Array.isArray(this.channelElements.items)) return;
+    if (!Array.isArray(this.channelElements.items)) {return;}
 
     for (const item of this.channelElements.items) {
       // Add the `<item>` node to a parent `<channel>` node
@@ -224,11 +224,11 @@ export class Feed implements RSS {
    */
   generate(): string {
     // The XML document along with the root node (named `<rss>`)
-    const document = create({ version: "1.0" }).ele("rss", { version: "2.0" });
+    const document = create({ version: "1.0" }).ele("rss", { version: "2.0" }),
 
     // The `<channel>` node which consists of various metadata and item child
-    // elements
-    const channel = document.ele("channel");
+    // Elements
+     channel = document.ele("channel");
 
     // Build the `<channel>` and its child `<item>` nodes
     this.addChannelEl(channel);
