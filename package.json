@@ -39,7 +39,8 @@
     "build": "tsc",
     "fmt": "oxfmt .",
     "fmt:check": "oxfmt . --check",
-    "lint": "eslint .",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint . --fix",
     "prepublish": "pnpm build",
     "test": "vitest"
   },
