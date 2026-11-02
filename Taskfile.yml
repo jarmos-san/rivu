@@ -58,7 +58,7 @@ tasks:
       coding standard across the entire source code.
     cmds:
       - pnpm lint
-      - pnpm format
+      - pnpm fmt
 
   build:
     desc: Build and compile the package.

@@ -2,48 +2,51 @@
   "name": "rivu",
   "version": "1.2.1",
   "description": "A modern and type-safe RSS generator for Node.js.",
+  "keywords": [
+    "atom",
+    "feed",
+    "feed builder",
+    "rss",
+    "rss feed",
+    "xml"
+  ],
   "homepage": "https://rivu.jarmos.dev",
   "bugs": {
     "url": "https://github.com/Jarmos-san/rivu/issues",
     "email": "contact@jarmos.dev"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsc",
-    "test": "vitest",
-    "lint": "oxlint src/",
-    "typecheck": "tsgolint src/",
-    "format": "oxfmt --write src/",
-    "format:check": "oxfmt --check src/",
-    "prepublish": "pnpm build"
-  },
-  "keywords": [
-    "rss",
-    "xml",
-    "atom",
-    "feed",
-    "feed builder",
-    "rss feed"
-  ],
+  "license": "MIT",
   "author": {
     "name": "Somraj Saha",
     "email": "contact@jarmos.dev",
     "url": "https://jarmos.dev"
   },
-  "funding": {
-    "type": "individual",
-    "url": "https://github.com/sponsors/Jarmos-san"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jarmos-san/rivu"
   },
-  "license": "MIT",
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/Jarmos-san"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "fmt": "oxfmt --write .",
+    "fmt:check": "oxfmt --check .",
+    "lint": "oxlint .",
+    "prepublish": "pnpm build",
+    "test": "vitest",
+    "typecheck": "tsgolint ."
+  },
+  "dependencies": {
+    "xmlbuilder2": "^4.0.0"
+  },
   "devDependencies": {
     "@types/node": "^25.9.5",
     "@vitest/coverage-v8": "^4.0.7",
@@ -52,9 +55,6 @@
     "oxlint-tsgolint": "latest",
     "typescript": "^7.0.2",
     "vitest": "^4.0.3"
-  },
-  "dependencies": {
-    "xmlbuilder2": "^4.0.0"
   },
   "packageManager": "pnpm@11.8.0"
 }
