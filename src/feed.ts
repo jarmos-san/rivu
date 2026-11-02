@@ -1,7 +1,7 @@
 import { create } from "xmlbuilder2";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 
-import type { ChannelElements, ItemElements, RSS } from "./types.ts";
+import type { BuildNodeOptions, ChannelElements, RSS } from "./types.ts";
 
 /**
  * @description Converts a JavaScript `Date` object into a valid RSS-approved
@@ -27,31 +27,38 @@ function formatDate(date?: Date): string | undefined {
 /**
  * @description Conditionally appends an XML element to the provided builder.
  *
- * This helper method avoids repititive null and undefined checks when
+ * This helper method avoids repetitive null and undefined checks when
  * serializing channel or item fields. If the supplied `value` is defined, a new
- * XML element named `name` is created under `doc` and its text content is set
- * to the string representation of `value`. If the `value` is `undefined` or
- * `null`, the method performs no action, ensuring that RSS fields are omitted
- * entirely from the final output rather than appearing as empty tags.
+ * XML element named `name` is created under `doc`.
  *
- * @param { XMLBuilder } doc - The current XML builder node to append the new
- *   element to.
- * @param { keyof ChannelElements | keyof ItemElements } name - The XML element
- *   name, restricted to a key declared on either {@link ChannelElements} or
- *   {@link ItemElements} so only RSS 2.0 sanctioned tags can be emitted.
- * @param { unknown } value - The value to serialize into the the element text
- *   content. If `undefined` or `null`, no element will be created.
+ * By default, text content is safely escaped using `.txt()`. If `cdata` is set
+ * to `true` (or if HTML tags/markup are automatically detected in the value),
+ * the content is wrapped in a CDATA section (`<![CDATA[...]]>`) via `.dat()`.
+ * If `value` is `undefined` or `null`, the method performs no action, ensuring
+ * RSS fields are omitted entirely from the final output rather than appearing
+ * as empty tags.
+ *
+ * @param { BuildNodeOptions } options - The options object containing
+ *   parameters for the node.
  */
-function buildNode(
-  doc: XMLBuilder,
-  name: keyof ChannelElements | keyof ItemElements,
-  value: unknown,
-): void {
-  if (value === undefined || value === null) {
+function buildNode(options: BuildNodeOptions): void {
+  if (options.value === undefined || options.value === null) {
     return;
   }
 
-  doc.ele(name).dat(String(value)).up();
+  const stringValue = String(options.value);
+
+  const shouldUseCdata = options.cdata || /<[a-z][\s\S]*>/iu.test(stringValue);
+
+  const element = options.doc.ele(options.name);
+
+  if (shouldUseCdata) {
+    element.dat(stringValue);
+  } else {
+    element.txt(stringValue);
+  }
+
+  element.up();
 }
 
 /**
@@ -112,55 +119,119 @@ export default class Feed implements RSS {
   private addChannelEl(document: XMLBuilder): void {
     // Required elements (title, link and description)
     // The title of the channel
-    buildNode(document, "title", this.channelElements.title);
+    buildNode({
+      cdata: true,
+      doc: document,
+      name: "title",
+      value: this.channelElements.title,
+    });
 
     // The link to the RSS feed
-    buildNode(document, "link", this.channelElements.link);
+    buildNode({
+      doc: document,
+      name: "link",
+      value: this.channelElements.link,
+    });
 
     // The description of the RSS feed itself
-    buildNode(document, "description", this.channelElements.description);
+    buildNode({
+      cdata: true,
+      doc: document,
+      name: "description",
+      value: this.channelElements.description,
+    });
 
     // Optional elements which are added if they were configured
     // The supported language of the feed (e.g., `"en-US"`, `"en-IN"`)
-    buildNode(document, "language", this.channelElements.language);
+    buildNode({
+      doc: document,
+      name: "language",
+      value: this.channelElements.language,
+    });
 
     // The copyright notice for the document
-    buildNode(document, "copyright", this.channelElements.copyright);
+    buildNode({
+      doc: document,
+      name: "copyright",
+      value: this.channelElements.copyright,
+    });
 
     // The editorial manager of the feed
-    buildNode(document, "managingEditor", this.channelElements.managingEditor);
+    buildNode({
+      doc: document,
+      name: "managingEditor",
+      value: this.channelElements.managingEditor,
+    });
 
     // The technical manager of the feed
-    buildNode(document, "webMaster", this.channelElements.webMaster);
+    buildNode({
+      doc: document,
+      name: "webMaster",
+      value: this.channelElements.webMaster,
+    });
 
     // The publication date of the feed (usually defaults to the last published
     // Item)
-    buildNode(document, "pubDate", formatDate(this.channelElements.pubDate));
+    buildNode({
+      doc: document,
+      name: "pubDate",
+      value: formatDate(this.channelElements.pubDate),
+    });
 
     // The date when the feed was last generated
-    buildNode(
-      document,
-      "lastBuildDate",
-      formatDate(this.channelElements.lastBuildDate),
-    );
+    buildNode({
+      doc: document,
+      name: "lastBuildDate",
+      value: formatDate(this.channelElements.lastBuildDate),
+    });
 
     // The category or tag of the feed
-    buildNode(document, "category", this.channelElements.category);
+    buildNode({
+      doc: document,
+      name: "category",
+      value: this.channelElements.category,
+    });
 
     // The software used to generate the feed (e.g., "Rivu (Node.js)")
-    buildNode(document, "generator", this.channelElements.generator);
+    buildNode({
+      doc: document,
+      name: "generator",
+      value: this.channelElements.generator,
+    });
 
     // The documentation (or rather the spec sheet) of RSS 2.0
-    buildNode(document, "docs", this.channelElements.docs);
+    buildNode({
+      doc: document,
+      name: "docs",
+      value: this.channelElements.docs,
+    });
 
     // The time to live before the feed refreshes
-    buildNode(document, "ttl", this.channelElements.ttl);
+    buildNode({
+      doc: document,
+      name: "ttl",
+      value: this.channelElements.ttl,
+    });
 
     // TODO: The following elements require some more logic to be handled. Also
     // The `textInput` field is missing and needs to be added here
-    buildNode(document, "image", this.channelElements.image);
-    buildNode(document, "skipHours", this.channelElements.skipHours);
-    buildNode(document, "skipDays", this.channelElements.skipDays);
+    buildNode({
+      doc: document,
+      name: "image",
+      value: this.channelElements.image,
+    });
+
+    buildNode({
+      doc: document,
+      name: "skipHours",
+      value: this.channelElements.skipHours,
+    });
+
+    buildNode({
+      doc: document,
+      name: "skipDays",
+      value: this.channelElements.skipDays,
+    });
   }
 
   /**
@@ -174,7 +245,7 @@ export default class Feed implements RSS {
    * @param { XMLBuilder } channel - The `<channel>` XML node into which
    *   `<item>` elements should be inserted.
    */
-  // oxlint-disable-next-line eslint/max-statements
+  // oxlint-disable-next-line eslint/max-statements eslint/max-lines-per-function
   private addItems(channel: XMLBuilder): void {
     // Stop execution if no items were passed
     if (!Array.isArray(this.channelElements.items)) {
@@ -185,15 +256,63 @@ export default class Feed implements RSS {
       // Add the `<item>` node to a parent `<channel>` node
       const itemEl = channel.ele("item");
 
-      // Build the children for the `<item>` node
-      buildNode(itemEl, "title", item.title);
-      buildNode(itemEl, "link", item.link);
-      buildNode(itemEl, "description", item.description);
-      buildNode(itemEl, "author", item.author);
-      buildNode(itemEl, "category", item.category);
-      buildNode(itemEl, "comments", item.comments);
-      buildNode(itemEl, "guid", item.guid);
-      buildNode(itemEl, "pubDate", formatDate(item.pubDate));
+      // The title of the item.
+      buildNode({
+        cdata: true,
+        doc: itemEl,
+        name: "title",
+        value: item.title,
+      });
+
+      // The canonical link to the item's content.
+      buildNode({
+        doc: itemEl,
+        name: "link",
+        value: item.link,
+      });
+
+      // The description of the item's description.
+      buildNode({
+        cdata: true,
+        doc: itemEl,
+        name: "description",
+        value: item.description,
+      });
+
+      // The author of the item's content.
+      buildNode({
+        doc: itemEl,
+        name: "author",
+        value: item.author,
+      });
+
+      // The category of the item's content.
+      buildNode({
+        doc: itemEl,
+        name: "category",
+        value: item.category,
+      });
+
+      // The comments on the item's content.
+      buildNode({
+        doc: itemEl,
+        name: "comments",
+        value: item.comments,
+      });
+
+      // The globally unique identifer of the item's content.
+      buildNode({
+        doc: itemEl,
+        name: "guid",
+        value: item.guid,
+      });
+
+      // The publication date of the item's content.
+      buildNode({
+        doc: itemEl,
+        name: "pubDate",
+        value: formatDate(item.pubDate),
+      });
     }
   }
 

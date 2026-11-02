@@ -1,3 +1,5 @@
+import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
+
 /**
  * @description Represents the days of the week used in RSS `<skipDays>`
  * metadata.
@@ -258,4 +260,18 @@ interface RSS {
   generate: () => string;
 }
 
-export type { Days, Hour, ItemElements, ChannelElements, RSS };
+interface BuildNodeOptions {
+  doc: XMLBuilder;
+  name: keyof ChannelElements | keyof ItemElements;
+  value: unknown;
+  cdata?: boolean;
+}
+
+export type {
+  Days,
+  Hour,
+  BuildNodeOptions,
+  ItemElements,
+  ChannelElements,
+  RSS,
+};
