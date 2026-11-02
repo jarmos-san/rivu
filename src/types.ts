@@ -255,7 +255,7 @@ interface RSS {
    *
    * @returns A serialised RSS 2.0 XML document as a UTF-8 string.
    */
-  func: () => string;
+  generate: () => string;
 }
 
 export type { Days, Hour, ItemElements, ChannelElements, RSS };
