@@ -1,9 +1,13 @@
 import { defineConfig } from "vitest/config";
 
+const MAX_BAIL = 3;
+const MAX_RETRY = 3;
+const MIN_RETRY = 0;
+
 export default defineConfig({
   cacheDir: process.env.VITEST ? "./.vitest" : undefined,
   test: {
-    bail: process.env.CI ? 3 : undefined,
+    bail: process.env.CI ? MAX_BAIL : undefined,
     coverage: {
       enabled: true,
       exclude: ["**/index.ts"],
@@ -11,11 +15,11 @@ export default defineConfig({
     },
     environment: "node",
     globals: true,
-    printConsoleTrace: process.env.CI ? true : false,
+    printConsoleTrace: process.env.CI ? true : undefined,
     reporters: process.env.GITHUB_ACTIONS
       ? ["dot", "github-actions"]
       : "default",
-    retry: process.env.CI ? 3 : 0,
+    retry: process.env.CI ? MAX_RETRY : MIN_RETRY,
     sequence: {
       concurrent: true,
     },
