@@ -1,27 +1,9 @@
 ## Description
 
-Provide a clear and concise summary of the changes in this PR.
+TODO: Provide a short summary of all the changes (in not more than one or two
+sentences).
 
-## Related Issue / Ticket
+## Modifications
 
-If applicable, link to the issue or ticket:
-
-- Closes #ISSUE_NUMBER
-
-## Type of Change
-
-Select the type of change this PR introduces:
-
-- [ ] Feature
-- [ ] Bug Fix
-- [ ] Refactor
-- [ ] Documentation Update
-- [ ] Other (please describe below)
-
-## How Has This Been Tested?
-
-Describe the testing strategy and steps taken to verify your changes.
-
-## Screenshots / Demo (if applicable)
-
-If your change affects UI, include before/after screenshots.
+TODO: Provide a detailed list of all changes introduced with the PR (in numbered
+points).
