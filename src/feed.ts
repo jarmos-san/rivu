@@ -4,6 +4,27 @@ import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 import type { ChannelElements, ItemElements, RSS } from "./types.ts";
 
 /**
+ * @description Converts a JavaScript `Date` object into a valid RSS-approved
+ * date string.
+ *
+ * RSS 2.0 requires the date values to be formatted using the RFC 822 format,
+ * which is achieved via the `Date.prototype.toUTCString()` method. If the
+ * provided value is `undefined`, `null`, or not a `Date` instance, no output is
+ * returned to ensure optional date fields are omitted in the rendered XML
+ * output.
+ *
+ * @param { Date | null | undefined } date - The date value to format. May be a
+ *   `Date` object, `null`, or `undefined`.
+ *
+ * @returns { string | undefined } A UTC-formatted date string if `date` is a
+ *   valid `Date` instance, otherwise `undefined` allowing the caller to skip
+ *   serialization.
+ */
+function formatDate(date?: Date): string | undefined {
+  return date instanceof Date ? date.toUTCString() : undefined;
+}
+
+/**
  * @description Represents an RSS feed generator instance.
  *
  * The `RSS` class stores channel-level metadata which describes the feed,
@@ -33,27 +54,6 @@ export default class Feed implements RSS {
    */
   public constructor(channelElements: ChannelElements) {
     this.channelElements = channelElements;
-  }
-
-  /**
-   * @description Converts a JavaScript `Date` object into a valid RSS-approved
-   * date string.
-   *
-   * RSS 2.0 requires the date values to be formatted using the RFC 1123 format
-   * which is achieved via the `Date.prototype.toUTCString()` method. If the
-   * provided value is `undefined` or `null` or is not a `Date` instance, no
-   * output is returned to ensure the optional date fields are ommited in the
-   * rendered XML output.
-   *
-   * @param { Date | null | undefined } date - The date value format. Maybe a
-   *   `Date` object, `null` or `undefined`.
-   *
-   * @returns { Date } A UTC-formatted date string if `date` is a valid `Date`
-   *   instance, otherwise it is undefined allowing the caller to skip
-   *   serialization.
-   */
-  private static formatDate(date?: Date | null): string | undefined {
-    return date instanceof Date ? date.toUTCString() : undefined;
   }
 
   /**
@@ -136,17 +136,13 @@ export default class Feed implements RSS {
 
     // The publication date of the feed (usually defaults to the last published
     // Item)
-    Feed.build(
-      document,
-      "pubDate",
-      Feed.formatDate(this.channelElements.pubDate),
-    );
+    Feed.build(document, "pubDate", formatDate(this.channelElements.pubDate));
 
     // The date when the feed was last generated
     Feed.build(
       document,
       "lastBuildDate",
-      Feed.formatDate(this.channelElements.lastBuildDate),
+      formatDate(this.channelElements.lastBuildDate),
     );
 
     // The category or tag of the feed
@@ -198,7 +194,7 @@ export default class Feed implements RSS {
       Feed.build(itemEl, "category", item.category);
       Feed.build(itemEl, "comments", item.comments);
       Feed.build(itemEl, "guid", item.guid);
-      Feed.build(itemEl, "pubDate", Feed.formatDate(item.pubDate));
+      Feed.build(itemEl, "pubDate", formatDate(item.pubDate));
     }
   }
 

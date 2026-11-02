@@ -125,7 +125,7 @@ interface ItemElements {
   guid?: string | null;
 
   /** @description The publication date for the item. */
-  pubDate?: Date | null;
+  pubDate?: Date;
 
   // Source?: string | URL
 }
@@ -172,10 +172,10 @@ interface ChannelElements {
   webMaster?: string | null;
 
   /** @description The publication date of the feed's content. */
-  pubDate?: Date | null;
+  pubDate?: Date;
 
   /** @description The last time the feed content was modified. */
-  lastBuildDate?: Date | null;
+  lastBuildDate?: Date;
 
   /** @description A category or classification of the feed. */
   category?: string | null;
