@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { Feed } from "../src/index.ts";
 
 describe("Feed.generate()", () => {

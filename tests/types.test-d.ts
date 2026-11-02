@@ -1,4 +1,5 @@
 import { describe, expectTypeOf, it } from "vitest";
+
 import type { Days, ChannelElements, RSS, Hour } from "../src/types.ts";
 
 describe("src/types.ts:Days", () => {
