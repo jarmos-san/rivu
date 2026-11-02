@@ -233,11 +233,17 @@ export default class Feed implements RSS {
    */
   public generate(): string {
     // The XML document along with the root node (named `<rss>`)
-    const document = create({ version: "1.0" }).ele("rss", { version: "2.0" });
+    const document = create({ version: "1.0" })
+      .ele("rss", { version: "2.0" })
+      .att("xmlns:atom", "http://www.w3.org/2005/Atom");
 
     // The `<channel>` node which consists of various metadata and item child
     // Elements
-    const channel = document.ele("channel");
+    const channel = document.ele("channel").ele("atom:link", {
+      href: `${this.channelElements.link}`,
+      rel: "self",
+      type: "application/rss+xml",
+    });
 
     // Build the `<channel>` and its child `<item>` nodes
     this.addChannelEl(channel);
