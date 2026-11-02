@@ -25,6 +25,36 @@ function formatDate(date?: Date): string | undefined {
 }
 
 /**
+ * @description Conditionally appends an XML element to the provided builder.
+ *
+ * This helper method avoids repititive null and undefined checks when
+ * serializing channel or item fields. If the supplied `value` is defined, a new
+ * XML element named `name` is created under `doc` and its text content is set
+ * to the string representation of `value`. If the `value` is `undefined` or
+ * `null`, the method performs no action, ensuring that RSS fields are omitted
+ * entirely from the final output rather than appearing as empty tags.
+ *
+ * @param { XMLBuilder } doc - The current XML builder node to append the new
+ *   element to.
+ * @param { keyof ChannelElements | keyof ItemElements } name - The XML element
+ *   name, restricted to a key declared on either {@link ChannelElements} or
+ *   {@link ItemElements} so only RSS 2.0 sanctioned tags can be emitted.
+ * @param { unknown } value - The value to serialize into the the element text
+ *   content. If `undefined` or `null`, no element will be created.
+ */
+function buildNode(
+  doc: XMLBuilder,
+  name: keyof ChannelElements | keyof ItemElements,
+  value: unknown,
+): void {
+  if (value === undefined || value === null) {
+    return;
+  }
+
+  doc.ele(name).dat(String(value)).up();
+}
+
+/**
  * @description Represents an RSS feed generator instance.
  *
  * The `RSS` class stores channel-level metadata which describes the feed,
@@ -57,37 +87,6 @@ export default class Feed implements RSS {
   }
 
   /**
-   * @description Conditionally appends an XML element to the provided builder.
-   *
-   * This helper method avoids repititive null and undefined checks when
-   * serializing channel or item fields. If the supplied `value` is defined, a
-   * new XML element named `name` is created under `doc` and its text content is
-   * set to the string representation of `value`. If the `value` is `undefined`
-   * or `null`, the method performs no action, ensuring that RSS fields are
-   * omitted entirely from the final output rather than appearing as empty
-   * tags.
-   *
-   * @param { XMLBuilder } doc - The current XML builder node to append the new
-   *   element to.
-   * @param { keyof ChannelElements | keyof ItemElements } name - The XML
-   *   element name, restricted to a key declared on either
-   *   {@link ChannelElements} or {@link ItemElements} so only RSS 2.0
-   *   sanctioned tags can be emitted.
-   * @param { unknown } value - The value to serialize into the the element text
-   *   content. If `undefined` or `null`, no element will be created.
-   */
-  private static build(
-    doc: XMLBuilder,
-    name: keyof ChannelElements | keyof ItemElements,
-    value: unknown,
-  ): void {
-    if (value === undefined || value === null) {
-      return;
-    }
-    doc.ele(name).dat(String(value)).up();
-  }
-
-  /**
    * @description Appends all `<channel>`-level metadata elements to the XML
    * document.
    *
@@ -113,55 +112,55 @@ export default class Feed implements RSS {
   private addChannelEl(document: XMLBuilder): void {
     // Required elements (title, link and description)
     // The title of the channel
-    Feed.build(document, "title", this.channelElements.title);
+    buildNode(document, "title", this.channelElements.title);
 
     // The link to the RSS feed
-    Feed.build(document, "link", this.channelElements.link);
+    buildNode(document, "link", this.channelElements.link);
 
     // The description of the RSS feed itself
-    Feed.build(document, "description", this.channelElements.description);
+    buildNode(document, "description", this.channelElements.description);
 
     // Optional elements which are added if they were configured
     // The supported language of the feed (e.g., `"en-US"`, `"en-IN"`)
-    Feed.build(document, "language", this.channelElements.language);
+    buildNode(document, "language", this.channelElements.language);
 
     // The copyright notice for the document
-    Feed.build(document, "copyright", this.channelElements.copyright);
+    buildNode(document, "copyright", this.channelElements.copyright);
 
     // The editorial manager of the feed
-    Feed.build(document, "managingEditor", this.channelElements.managingEditor);
+    buildNode(document, "managingEditor", this.channelElements.managingEditor);
 
     // The technical manager of the feed
-    Feed.build(document, "webMaster", this.channelElements.webMaster);
+    buildNode(document, "webMaster", this.channelElements.webMaster);
 
     // The publication date of the feed (usually defaults to the last published
     // Item)
-    Feed.build(document, "pubDate", formatDate(this.channelElements.pubDate));
+    buildNode(document, "pubDate", formatDate(this.channelElements.pubDate));
 
     // The date when the feed was last generated
-    Feed.build(
+    buildNode(
       document,
       "lastBuildDate",
       formatDate(this.channelElements.lastBuildDate),
     );
 
     // The category or tag of the feed
-    Feed.build(document, "category", this.channelElements.category);
+    buildNode(document, "category", this.channelElements.category);
 
     // The software used to generate the feed (e.g., "Rivu (Node.js)")
-    Feed.build(document, "generator", this.channelElements.generator);
+    buildNode(document, "generator", this.channelElements.generator);
 
     // The documentation (or rather the spec sheet) of RSS 2.0
-    Feed.build(document, "docs", this.channelElements.docs);
+    buildNode(document, "docs", this.channelElements.docs);
 
     // The time to live before the feed refreshes
-    Feed.build(document, "ttl", this.channelElements.ttl);
+    buildNode(document, "ttl", this.channelElements.ttl);
 
     // TODO: The following elements require some more logic to be handled. Also
     // The `textInput` field is missing and needs to be added here
-    Feed.build(document, "image", this.channelElements.image);
-    Feed.build(document, "skipHours", this.channelElements.skipHours);
-    Feed.build(document, "skipDays", this.channelElements.skipDays);
+    buildNode(document, "image", this.channelElements.image);
+    buildNode(document, "skipHours", this.channelElements.skipHours);
+    buildNode(document, "skipDays", this.channelElements.skipDays);
   }
 
   /**
@@ -187,14 +186,14 @@ export default class Feed implements RSS {
       const itemEl = channel.ele("item");
 
       // Build the children for the `<item>` node
-      Feed.build(itemEl, "title", item.title);
-      Feed.build(itemEl, "link", item.link);
-      Feed.build(itemEl, "description", item.description);
-      Feed.build(itemEl, "author", item.author);
-      Feed.build(itemEl, "category", item.category);
-      Feed.build(itemEl, "comments", item.comments);
-      Feed.build(itemEl, "guid", item.guid);
-      Feed.build(itemEl, "pubDate", formatDate(item.pubDate));
+      buildNode(itemEl, "title", item.title);
+      buildNode(itemEl, "link", item.link);
+      buildNode(itemEl, "description", item.description);
+      buildNode(itemEl, "author", item.author);
+      buildNode(itemEl, "category", item.category);
+      buildNode(itemEl, "comments", item.comments);
+      buildNode(itemEl, "guid", item.guid);
+      buildNode(itemEl, "pubDate", formatDate(item.pubDate));
     }
   }
 
