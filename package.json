@@ -55,5 +55,11 @@
     "typescript-eslint": "^8.46.3",
     "vitest": "^4.0.3"
   },
-  "packageManager": "pnpm@12.16.1"
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.16.1",
+      "onFail": "download"
+    }
+  }
 }
