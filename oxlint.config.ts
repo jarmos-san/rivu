@@ -40,6 +40,14 @@ export default defineConfig({
     "node",
   ],
   rules: {
+    "func-style": [
+      "error",
+      "declaration",
+      {
+        allowArrowFunctions: true,
+        allowTypeAnnotation: true,
+      },
+    ],
     "import/no-default-export": "allow",
     "import/no-named-export": "off",
     "import/no-nodejs-modules": "off",
