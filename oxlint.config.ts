@@ -14,6 +14,7 @@ export default defineConfig({
     builtin: true,
     node: true,
   },
+  ignorePatterns: ["**/sample.ts"],
   overrides: [
     {
       files: ["*.config.ts"],
