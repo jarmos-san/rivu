@@ -1,72 +1,57 @@
 {
   "compilerOptions": {
-    /* === Project Structure === */
     "rootDir": "./src",
     "outDir": "./dist",
-
-    /* === ECMAScript Target & Module Resolution === */
-    "target": "ES2022", // Latest widely supported features
-    "lib": ["ES2022"], // Match target
-    "module": "NodeNext", // Best for Node + modern ESM packages
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "moduleDetection": "force", // Enforce explicit module boundaries
+    "moduleDetection": "force",
     "typeRoots": ["./node_modules/@types"],
     "types": ["node"],
-
-    /* === Output & Build === */
-    "declaration": true, // Emit .d.ts files
-    "declarationMap": true, // Map declarations back to sources
-    "sourceMap": true, // Enable debugging
-    "noEmitOnError": true, // Block output if any error
-    "importHelpers": true, // Reuse helper functions (needs tslib)
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "importHelpers": true,
     "newLine": "lf",
-    "stripInternal": true, // Remove @internal-marked declarations
-    "preserveSymlinks": false, // Correct module resolution in linked deps
+    "stripInternal": true,
+    "preserveSymlinks": false,
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
-
-    /* === Interop === */
-    "esModuleInterop": true, // Enable `import x from "cjs"`
-    "allowSyntheticDefaultImports": true, // Works with default CJS imports
-    "resolveJsonModule": true, // Allow importing JSON files
-    "verbatimModuleSyntax": true, // Preserve ESM syntax exactly
-
-    /* === Strict Type Checking === */
-    "strict": true, // Enables all strict checks below
-    "noImplicitAny": true, // Forbid implicit `any`
-    "strictNullChecks": true, // Require explicit null handling
-    "strictFunctionTypes": true, // Enforce function variance
-    "strictBindCallApply": true, // Enforce correct `bind`, `call`, `apply`
-    "strictPropertyInitialization": true, // Require initialized class properties
-    "noImplicitThis": true, // Disallow untyped `this`
-    "useUnknownInCatchVariables": true, // Enforce `unknown` in `catch (err)`
-    "exactOptionalPropertyTypes": true, // `optional?: T` ? `optional: T | undefined`
-    "noUncheckedIndexedAccess": true, // Indexing adds `undefined`
-    "noPropertyAccessFromIndexSignature": true, // Force safe access via index
-    "noFallthroughCasesInSwitch": true, // Prevent silent switch fallthrough
-    "noUncheckedSideEffectImports": true, // Detect unused side-effect-only imports
-    "checkJs": false, // Only type-check TS files
-    "strictBuiltinIteratorReturn": true, // Warn if iterators return wrong type
-
-    /* === Lint-like Type Rules === */
-    "noUnusedLocals": true, // Forbid unused variables
-    "noUnusedParameters": true, // Forbid unused function args
-    "noImplicitReturns": true, // Require return on all code paths
-    "noImplicitOverride": true, // Enforce `override` keyword
-    "allowUnreachableCode": false, // Error on dead code
-    "allowUnusedLabels": false, // Error on unused labels
-
-    /* === Safety & Stability === */
-    "forceConsistentCasingInFileNames": true, // Cross-platform filename safety
-    "skipLibCheck": false, // Check all dependency types (strict!)
-    "alwaysStrict": true, // Parse files in strict mode
-    "isolatedModules": true, // Enforce per-file isolation
-
-    /* === Diagnostics / Debug === */
-    "traceResolution": false, // Set to true if debugging module resolution
-    "explainFiles": false, // Show included file list
-
-    /* === Hygiene === */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "checkJs": false,
+    "strictBuiltinIteratorReturn": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": false,
+    "alwaysStrict": true,
+    "isolatedModules": true,
+    "traceResolution": false,
+    "explainFiles": false,
     "removeComments": true,
     "emitDecoratorMetadata": false,
     "experimentalDecorators": false
