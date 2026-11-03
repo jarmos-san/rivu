@@ -196,7 +196,6 @@ tags
 *.asp
 *.cer
 *.csr
-*.css
 *.htm
 *.html
 *.js

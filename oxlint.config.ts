@@ -29,6 +29,15 @@ export default defineConfig({
       files: ["tests/**/*.test.ts"],
       rules: { "import/no-relative-parent-imports": "off" },
     },
+    {
+      files: ["**/*.vue"],
+      rules: {
+        "import/unambiguous": "off",
+        "node/no-top-level-await": "off",
+        "oxc/no-optional-chaining": "off",
+        "vitest/require-hook": "off",
+      },
+    },
   ],
   plugins: [
     "typescript",
