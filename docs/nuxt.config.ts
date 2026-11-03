@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
-  modules: ["@nuxt/content"],
+  modules: ["@nuxt/content", "@nuxt/icon"],
   vite: {
     plugins: [tailwindcss()],
   },
