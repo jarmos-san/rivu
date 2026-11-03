@@ -3118,8 +3118,8 @@ packages:
   js-tokens@9.0.1:
     resolution: {integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==}
 
-  js-yaml@4.1.1:
-    resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
+  js-yaml@4.3.2:
+    resolution: {integrity: sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==}
     hasBin: true
 
   jsesc@3.1.0:
@@ -4967,7 +4967,7 @@ snapshots:
   '@apidevtools/json-schema-ref-parser@14.2.1(@types/json-schema@7.0.15)':
     dependencies:
       '@types/json-schema': 7.0.15
-      js-yaml: 4.1.1
+      js-yaml: 4.3.2
 
   '@astrojs/compiler-binding-android-arm64@0.5.2':
     optional: true
@@ -8019,7 +8019,7 @@ snapshots:
 
   js-tokens@9.0.1: {}
 
-  js-yaml@4.1.1:
+  js-yaml@4.3.2:
     dependencies:
       argparse: 2.0.1
 
@@ -10283,7 +10283,7 @@ snapshots:
       '@oozcitak/dom': 2.0.2
       '@oozcitak/infra': 2.0.2
       '@oozcitak/util': 10.0.0
-      js-yaml: 4.1.1
+      js-yaml: 4.3.2
 
   xmlhttprequest-ssl@2.1.2: {}
 
