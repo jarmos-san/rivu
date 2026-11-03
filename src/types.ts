@@ -260,18 +260,11 @@ interface RSS {
   generate: () => string;
 }
 
-interface BuildNodeOptions {
+interface BuildNodeOption {
   doc: XMLBuilder;
   name: keyof ChannelElements | keyof ItemElements;
   value: unknown;
   cdata?: boolean;
 }
 
-export type {
-  Days,
-  Hour,
-  BuildNodeOptions,
-  ItemElements,
-  ChannelElements,
-  RSS,
-};
+export type { Days, Hour, BuildNodeOption, ItemElements, ChannelElements, RSS };

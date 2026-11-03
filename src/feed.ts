@@ -1,7 +1,7 @@
 import { create } from "xmlbuilder2";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 
-import type { BuildNodeOptions, ChannelElements, RSS } from "./types.ts";
+import type { BuildNodeOption, ChannelElements, RSS } from "./types.ts";
 
 /**
  * @description Helper function to safely check if a string is a valid
@@ -116,7 +116,7 @@ function appendContent(
  * @param { BuildNodeOptions } options - The options object containing
  *   parameters for the node.
  */
-function buildNode(options: BuildNodeOptions): void {
+function buildNode(options: BuildNodeOption): void {
   if (options.value === undefined || options.value === null) {
     return;
   }
@@ -183,123 +183,42 @@ export default class Feed implements RSS {
    * @param { XMLBuilder } document - The XML node representing the `<channel>`
    *   element to which metadata elements shoulld be appended.
    */
-  // oxlint-disable-next-line eslint/max-statements eslint/max-lines-per-function
   private addChannelEl(document: XMLBuilder): void {
-    // Required elements (title, link and description)
-    // The title of the channel
-    buildNode({
-      cdata: true,
-      doc: document,
-      name: "title",
-      value: this.channelElements.title,
-    });
+    const nodes: Omit<BuildNodeOption, "doc">[] = [
+      // NOTE: The sequence of the arrangement is IMPORTANT!
+      { cdata: true, name: "title", value: this.channelElements.title },
+      { name: "link", value: this.channelElements.link },
+      {
+        cdata: true,
+        name: "description",
+        value: this.channelElements.description,
+      },
+      { name: "language", value: this.channelElements.language },
+      { name: "copyright", value: this.channelElements.copyright },
+      { name: "managingEditor", value: this.channelElements.managingEditor },
+      { name: "webMaster", value: this.channelElements.webMaster },
+      { name: "pubDate", value: this.channelElements.pubDate },
+      {
+        name: "lastBuildDate",
+        value: formatDate(this.channelElements.lastBuildDate),
+      },
+      { name: "category", value: this.channelElements.category },
+      { name: "generator", value: this.channelElements.generator },
+      { name: "docs", value: this.channelElements.docs },
+      { name: "ttl", value: this.channelElements.ttl },
+      { name: "image", value: this.channelElements.image },
+      { name: "skipHours", value: this.channelElements.skipHours },
+      { name: "skipDays", value: this.channelElements.skipDays },
+    ];
 
-    // The link to the RSS feed
-    buildNode({
-      doc: document,
-      name: "link",
-      value: this.channelElements.link,
-    });
-
-    // The description of the RSS feed itself
-    buildNode({
-      cdata: true,
-      doc: document,
-      name: "description",
-      value: this.channelElements.description,
-    });
-
-    // Optional elements which are added if they were configured
-    // The supported language of the feed (e.g., `"en-US"`, `"en-IN"`)
-    buildNode({
-      doc: document,
-      name: "language",
-      value: this.channelElements.language,
-    });
-
-    // The copyright notice for the document
-    buildNode({
-      doc: document,
-      name: "copyright",
-      value: this.channelElements.copyright,
-    });
-
-    // The editorial manager of the feed
-    buildNode({
-      doc: document,
-      name: "managingEditor",
-      value: this.channelElements.managingEditor,
-    });
-
-    // The technical manager of the feed
-    buildNode({
-      doc: document,
-      name: "webMaster",
-      value: this.channelElements.webMaster,
-    });
-
-    // The publication date of the feed (usually defaults to the last published
-    // Item)
-    buildNode({
-      doc: document,
-      name: "pubDate",
-      value: formatDate(this.channelElements.pubDate),
-    });
-
-    // The date when the feed was last generated
-    buildNode({
-      doc: document,
-      name: "lastBuildDate",
-      value: formatDate(this.channelElements.lastBuildDate),
-    });
-
-    // The category or tag of the feed
-    buildNode({
-      doc: document,
-      name: "category",
-      value: this.channelElements.category,
-    });
-
-    // The software used to generate the feed (e.g., "Rivu (Node.js)")
-    buildNode({
-      doc: document,
-      name: "generator",
-      value: this.channelElements.generator,
-    });
-
-    // The documentation (or rather the spec sheet) of RSS 2.0
-    buildNode({
-      doc: document,
-      name: "docs",
-      value: this.channelElements.docs,
-    });
-
-    // The time to live before the feed refreshes
-    buildNode({
-      doc: document,
-      name: "ttl",
-      value: this.channelElements.ttl,
-    });
-
-    // TODO: The following elements require some more logic to be handled. Also
-    // The `textInput` field is missing and needs to be added here
-    buildNode({
-      doc: document,
-      name: "image",
-      value: this.channelElements.image,
-    });
-
-    buildNode({
-      doc: document,
-      name: "skipHours",
-      value: this.channelElements.skipHours,
-    });
-
-    buildNode({
-      doc: document,
-      name: "skipDays",
-      value: this.channelElements.skipDays,
-    });
+    for (const node of nodes) {
+      buildNode({
+        cdata: node.cdata ?? false,
+        doc: document,
+        name: node.name,
+        value: node.value,
+      });
+    }
   }
 
   /**
@@ -323,64 +242,25 @@ export default class Feed implements RSS {
     for (const item of this.channelElements.items) {
       // Add the `<item>` node to a parent `<channel>` node
       const itemEl = channel.ele("item");
+      const itemNodes: Omit<BuildNodeOption, "doc">[] = [
+        { cdata: true, name: "title", value: item.title },
+        { name: "link", value: item.link },
+        { cdata: true, name: "description", value: item.description },
+        { name: "author", value: item.author },
+        { name: "category", value: item.category },
+        { name: "comments", value: item.comments },
+        { name: "guid", value: item.guid },
+        { name: "pubDate", value: item.pubDate },
+      ];
 
-      // The title of the item.
-      buildNode({
-        cdata: true,
-        doc: itemEl,
-        name: "title",
-        value: item.title,
-      });
-
-      // The canonical link to the item's content.
-      buildNode({
-        doc: itemEl,
-        name: "link",
-        value: item.link,
-      });
-
-      // The description of the item's description.
-      buildNode({
-        cdata: true,
-        doc: itemEl,
-        name: "description",
-        value: item.description,
-      });
-
-      // The author of the item's content.
-      buildNode({
-        doc: itemEl,
-        name: "author",
-        value: item.author,
-      });
-
-      // The category of the item's content.
-      buildNode({
-        doc: itemEl,
-        name: "category",
-        value: item.category,
-      });
-
-      // The comments on the item's content.
-      buildNode({
-        doc: itemEl,
-        name: "comments",
-        value: item.comments,
-      });
-
-      // The globally unique identifer of the item's content.
-      buildNode({
-        doc: itemEl,
-        name: "guid",
-        value: item.guid,
-      });
-
-      // The publication date of the item's content.
-      buildNode({
-        doc: itemEl,
-        name: "pubDate",
-        value: formatDate(item.pubDate),
-      });
+      for (const node of itemNodes) {
+        buildNode({
+          cdata: node.cdata ?? false,
+          doc: itemEl,
+          name: node.name,
+          value: node.value,
+        });
+      }
     }
   }
 
