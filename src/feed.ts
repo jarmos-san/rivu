@@ -1,7 +1,12 @@
 import { create } from "xmlbuilder2";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 
-import type { BuildNodeOption, ChannelElements, RSS } from "./types.ts";
+import type {
+  BuildNodeOption,
+  ChannelElements,
+  RSS,
+  StyleSheet,
+} from "./types.ts";
 import { handleGUIDAttribute, appendContent, formatDate } from "./utils.ts";
 
 /**
@@ -57,6 +62,12 @@ export default class Feed implements RSS {
   private readonly channelElements: ChannelElements;
 
   /**
+   * @description An optional stylesheet URL to be injected as an XML processing
+   * instruction at the document root.
+   */
+  private readonly stylesheet?: StyleSheet;
+
+  /**
    * @description Creates a new `RSS` feed instance with the provided channel
    * metadata.
    *
@@ -64,9 +75,17 @@ export default class Feed implements RSS {
    *   RSS channel. This must include the required properties defined in
    *   {@link ChannelElements}, such as `title`, `link` and `description`. The
    *   optional fields may also be provided to supply extended metadata.
+   * @param { URL } stylesheet - Optional URL to an XSL/CSS stylesheet.
    */
-  public constructor(channelElements: ChannelElements) {
+  public constructor(
+    channelElements: ChannelElements,
+    stylesheet?: StyleSheet,
+  ) {
     this.channelElements = channelElements;
+
+    if (stylesheet) {
+      this.stylesheet = stylesheet;
+    }
   }
 
   /**
@@ -201,12 +220,21 @@ export default class Feed implements RSS {
    * @returns { string } A formatted RSS feed XML string.
    */
   public generate(): string {
-    // The XML document along with the root node (named `<rss>`)
-    const document = create({ version: "1.0" })
+    // Construct the XML DOM tree
+    const document = create({ version: "1.0" });
+
+    // Conditionally insert stylesheet processing instructions if provided.
+    if (this.stylesheet) {
+      document.ins("xml-stylesheet", `type="text/xsl" href=${this.stylesheet}`);
+    }
+
+    // The XML document along with the root node named `<rss>`.
+    const rss = document
       .ele("rss", { version: "2.0" })
       .att("xmlns:atom", "http://www.w3.org/2005/Atom");
 
-    const channel = document.ele("channel");
+    // Construct the `<channel>` node in the tree.
+    const channel = rss.ele("channel");
     channel
       .ele("atom:link", {
         href: `${this.channelElements.link}`,

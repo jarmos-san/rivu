@@ -267,4 +267,18 @@ interface BuildNodeOption {
   cdata?: boolean;
 }
 
-export type { Days, Hour, BuildNodeOption, ItemElements, ChannelElements, RSS };
+/**
+ * @description Represents the URL to access the XSL/CSS stylesheet to be used
+ * for styling the XML document.
+ */
+type StyleSheet = URL;
+
+export type {
+  Days,
+  Hour,
+  BuildNodeOption,
+  ItemElements,
+  ChannelElements,
+  RSS,
+  StyleSheet,
+};
