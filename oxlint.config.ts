@@ -14,6 +14,7 @@ export default defineConfig({
     builtin: true,
     node: true,
   },
+  ignorePatterns: ["**/sample.ts"],
   overrides: [
     {
       files: ["*.config.ts"],
@@ -40,6 +41,14 @@ export default defineConfig({
     "node",
   ],
   rules: {
+    "func-style": [
+      "error",
+      "declaration",
+      {
+        allowArrowFunctions: true,
+        allowTypeAnnotation: true,
+      },
+    ],
     "import/no-default-export": "allow",
     "import/no-named-export": "off",
     "import/no-nodejs-modules": "off",
@@ -48,5 +57,7 @@ export default defineConfig({
     "one-var": "off",
     "sort-imports": "off",
     "vitest/no-importing-vitest-globals": "off",
+    "vitest/prefer-strict-boolean-matchers": "off",
+    "vitest/prefer-to-have-been-called-times": "allow",
   },
 });

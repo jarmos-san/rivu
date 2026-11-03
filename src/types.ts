@@ -1,3 +1,5 @@
+import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
+
 /**
  * @description Represents the days of the week used in RSS `<skipDays>`
  * metadata.
@@ -125,7 +127,7 @@ interface ItemElements {
   guid?: string | null;
 
   /** @description The publication date for the item. */
-  pubDate?: Date | null;
+  pubDate?: Date;
 
   // Source?: string | URL
 }
@@ -172,10 +174,10 @@ interface ChannelElements {
   webMaster?: string | null;
 
   /** @description The publication date of the feed's content. */
-  pubDate?: Date | null;
+  pubDate?: Date;
 
   /** @description The last time the feed content was modified. */
-  lastBuildDate?: Date | null;
+  lastBuildDate?: Date;
 
   /** @description A category or classification of the feed. */
   category?: string | null;
@@ -255,7 +257,14 @@ interface RSS {
    *
    * @returns A serialised RSS 2.0 XML document as a UTF-8 string.
    */
-  func: () => string;
+  generate: () => string;
 }
 
-export type { Days, Hour, ItemElements, ChannelElements, RSS };
+interface BuildNodeOption {
+  doc: XMLBuilder;
+  name: keyof ChannelElements | keyof ItemElements;
+  value: unknown;
+  cdata?: boolean;
+}
+
+export type { Days, Hour, BuildNodeOption, ItemElements, ChannelElements, RSS };
