@@ -57,5 +57,7 @@ export default defineConfig({
     "one-var": "off",
     "sort-imports": "off",
     "vitest/no-importing-vitest-globals": "off",
+    "vitest/prefer-strict-boolean-matchers": "off",
+    "vitest/prefer-to-have-been-called-times": "allow",
   },
 });
