@@ -1,10 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/node,vim,visualstudiocode,web,astro,taskfile
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,vim,visualstudiocode,web,astro,taskfile
-
-### Astro ###
-# Gitignore template for Astro projects
-# Ignore content collection generated files
-.astro
+# Created by https://www.toptal.com/developers/gitignore/api/node,vim,visualstudiocode,web,nuxtjs
+# Edit at https://www.toptal.com/developers/gitignore?templates=node,vim,visualstudiocode,web,nuxtjs
 
 ### Node ###
 # Logs
@@ -143,11 +138,19 @@ dist
 
 # Optional stylelint cache
 
-# Vitest cache
-.vitest
-
 # SvelteKit build / generate output
 .svelte-kit
+
+### NuxtJS ###
+# Generated dirs
+.nuxt-*
+.output
+.gen
+
+# Node dependencies
+node_modules
+
+# System files
 
 ### Vim ###
 # Swap
@@ -204,7 +207,8 @@ tags
 *.wat
 *.xhtml
 
-### Taskfile ###
 .task
+.vitest
+.data
 
-# End of https://www.toptal.com/developers/gitignore/api/node,vim,visualstudiocode,web,astro,taskfile
+# End of https://www.toptal.com/developers/gitignore/api/node,vim,visualstudiocode,web,nuxtjs
