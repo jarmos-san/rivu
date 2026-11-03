@@ -34,13 +34,13 @@ jobs:
           cache: true
           require-lockfile: true
 
-      - name: Build the Astro Site
-        run: pnpm run build
+      - name: Build the Site
+        run: pnpm run generate
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v5.0.0
         with:
-          path: docs/dist
+          path: ./.output/public
 
   deploy:
     name: Deploy the Docs
