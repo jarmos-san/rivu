@@ -57,6 +57,19 @@ This should print a full RSS 2.0 feed as a string like this:
 </rss>
 ```
 
+### Atom 1.0 Feeds
+
+The same feed can also be generated as an Atom 1.0 document by passing `"atom"`
+to `generate()`:
+
+```typescript
+feed.generate("atom");
+```
+
+The channel metadata and items are mapped to their closest Atom equivalents
+(e.g. `description` becomes `<subtitle>` and an item's `guid` becomes the
+entry's `<id>`) while RSS-only fields like `ttl` or `skipDays` are omitted.
+
 For more information with regards to the API reference, a more detailed usage
 guide and the contribution guidelines, check out
 [the official documentation](https://rivu.jarmos.dev).

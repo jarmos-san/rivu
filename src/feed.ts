@@ -1,9 +1,11 @@
 import { create } from "xmlbuilder2";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 
+import buildAtomFeed from "./atom.ts";
 import type {
   BuildNodeOption,
   ChannelElements,
+  FeedFormat,
   RSS,
   StyleSheet,
 } from "./types.ts";
@@ -191,46 +193,18 @@ export default class Feed implements RSS {
   }
 
   /**
-   * @description Generates an RSS 2.0 compliant XML string representation of
-   * the feed.
+   * @description Builds the RSS 2.0 `<rss>` and `<channel>` elements and
+   * populates them using the metadata stored in {@link channelElements}.
    *
-   * This method constructs the `<rss>` and `<channel>` elements and then
-   * populates them using the metadata stored in {@link channelElements}. All
-   * required channel fields (`title`, `link` and `description`) are always
-   * included in the output. Optional fields are only included if values have
-   * been provided by the consumer of this class.
+   * Internally, {@link buildNode} is used to conditionally add XML elements and
+   * avoid repetitive null/undefined checks. Undefined or null values are
+   * silently skipped, ensuring a clean and standards-compliant RSS output with
+   * no empty tags.
    *
-   * Internally, the helper function `add()` is used to conditionally add XML
-   * elements and avoid repetitive null/undefined checks. Undefined or null
-   * values are silently skipped, ensuring a clean and standards-compliant RSS
-   * output with no empty tags.
-   *
-   * @example
-   *   ```ts
-   *   const feed = new Feed({
-   *     title: "My Blog",
-   *     link: "https://example.com",
-   *     description: "Latest updates",
-   *   });
-   *
-   *   const xml = feed.generate();
-   *   console.log(xml);
-   *   ```;
-   *
-   * @returns { string } A formatted RSS feed XML string.
+   * @param { XMLBuilder } document - The XML document to append the `<rss>`
+   *   element to.
    */
-  public generate(): string {
-    // Construct the XML DOM tree
-    const document = create({ version: "1.0" });
-
-    // Conditionally insert stylesheet processing instructions if provided.
-    if (this.stylesheet) {
-      document.ins(
-        "xml-stylesheet",
-        `type="text/xsl" href="${this.stylesheet}"`,
-      );
-    }
-
+  private buildRSS(document: XMLBuilder): void {
     // The XML document along with the root node named `<rss>`.
     const rss = document
       .ele("rss", { version: "2.0" })
@@ -249,6 +223,55 @@ export default class Feed implements RSS {
     // Build the `<channel>` and its child `<item>` nodes
     this.addChannelEl(channel);
     this.addItems(channel);
+  }
+
+  /**
+   * @description Generates an RSS 2.0 (default) or Atom 1.0 compliant XML
+   * string representation of the feed.
+   *
+   * Passing `"atom"` as the `format` maps the same channel metadata and items
+   * to an Atom 1.0 `<feed>` document instead (see {@link buildAtomFeed} for how
+   * each field is mapped). The optional stylesheet is applied to both formats.
+   *
+   * All required channel fields (`title`, `link` and `description`) are always
+   * included in the output. Optional fields are only included if values have
+   * been provided by the consumer of this class.
+   *
+   * @example
+   *   ```ts
+   *   const feed = new Feed({
+   *     title: "My Blog",
+   *     link: "https://example.com",
+   *     description: "Latest updates",
+   *   });
+   *
+   *   const xml = feed.generate();
+   *   const atomXml = feed.generate("atom");
+   *   console.log(xml);
+   *   ```;
+   *
+   * @param { FeedFormat } format - The syndication format to generate, either
+   *   `"rss"` (default) or `"atom"`.
+   *
+   * @returns { string } A formatted RSS or Atom feed XML string.
+   */
+  public generate(format: FeedFormat = "rss"): string {
+    // Construct the XML DOM tree
+    const document = create({ version: "1.0" });
+
+    // Conditionally insert stylesheet processing instructions if provided.
+    if (this.stylesheet) {
+      document.ins(
+        "xml-stylesheet",
+        `type="text/xsl" href="${this.stylesheet}"`,
+      );
+    }
+
+    if (format === "atom") {
+      buildAtomFeed(document, this.channelElements);
+    } else {
+      this.buildRSS(document);
+    }
 
     // Render the XML document tree with nicely indented lines (where necessary)
     return document.end({ prettyPrint: true });

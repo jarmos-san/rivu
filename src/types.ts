@@ -253,12 +253,22 @@ interface ChannelElements {
  */
 interface RSS {
   /**
-   * @description Generates the RSS feed as a serialised XML string.
+   * @description Generates the feed as a serialised XML string.
    *
-   * @returns A serialised RSS 2.0 XML document as a UTF-8 string.
+   * @param format - The syndication format to generate, defaults to `"rss"`.
+   *
+   * @returns A serialised RSS 2.0 or Atom 1.0 XML document as a UTF-8 string.
    */
-  generate: () => string;
+  generate: (format?: FeedFormat) => string;
 }
+
+/**
+ * @description The syndication formats a feed can be generated in.
+ *
+ * - `"rss"` generates a RSS 2.0 document.
+ * - `"atom"` generates an Atom 1.0 (RFC 4287) document.
+ */
+type FeedFormat = "rss" | "atom";
 
 interface BuildNodeOption {
   doc: XMLBuilder;
@@ -275,6 +285,7 @@ type StyleSheet = URL;
 
 export type {
   Days,
+  FeedFormat,
   Hour,
   BuildNodeOption,
   ItemElements,
