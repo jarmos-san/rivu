@@ -23,7 +23,7 @@ import { handleGUIDAttribute, appendContent, formatDate } from "./utils.ts";
  * RSS fields are omitted entirely from the final output rather than appearing
  * as empty tags.
  *
- * Additionally, if the element is a `guid`, an `isPermalink` attribute is
+ * Additionally, if the element is a `guid`, an `isPermaLink` attribute is
  * automatically added indicating whether the value is a valid URL.
  *
  * @param { BuildNodeOptions } options - The options object containing
