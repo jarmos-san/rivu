@@ -38,3 +38,24 @@ describe("formatting", () => {
     expect(xml).toMatch(/\n\s*<channel>/u);
   });
 });
+
+describe("stylesheet", () => {
+  it("quotes the stylesheet href", () => {
+    expect.hasAssertions();
+
+    const feed = new Feed(
+      {
+        description: "Test stylesheet",
+        items: [],
+        link: "https://example.com",
+        title: "Stylesheet",
+      },
+      new URL("https://example.com/rss.xsl"),
+    );
+    const xml = feed.generate();
+
+    expect(xml).toContain(
+      '<?xml-stylesheet type="text/xsl" href="https://example.com/rss.xsl"?>',
+    );
+  });
+});

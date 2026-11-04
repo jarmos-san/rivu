@@ -25,7 +25,7 @@ import { handleGUIDAttribute, appendContent, formatDate } from "./utils.ts";
  * RSS fields are omitted entirely from the final output rather than appearing
  * as empty tags.
  *
- * Additionally, if the element is a `guid`, an `isPermalink` attribute is
+ * Additionally, if the element is a `guid`, an `isPermaLink` attribute is
  * automatically added indicating whether the value is a valid URL.
  *
  * @param { BuildNodeOptions } options - The options object containing
@@ -126,7 +126,7 @@ export default class Feed implements RSS {
       { name: "copyright", value: this.channelElements.copyright },
       { name: "managingEditor", value: this.channelElements.managingEditor },
       { name: "webMaster", value: this.channelElements.webMaster },
-      { name: "pubDate", value: this.channelElements.pubDate },
+      { name: "pubDate", value: formatDate(this.channelElements.pubDate) },
       {
         name: "lastBuildDate",
         value: formatDate(this.channelElements.lastBuildDate),
@@ -178,7 +178,7 @@ export default class Feed implements RSS {
         { name: "category", value: item.category },
         { name: "comments", value: item.comments },
         { name: "guid", value: item.guid },
-        { name: "pubDate", value: item.pubDate },
+        { name: "pubDate", value: formatDate(item.pubDate) },
       ];
 
       for (const node of itemNodes) {
@@ -261,7 +261,10 @@ export default class Feed implements RSS {
 
     // Conditionally insert stylesheet processing instructions if provided.
     if (this.stylesheet) {
-      document.ins("xml-stylesheet", `type="text/xsl" href=${this.stylesheet}`);
+      document.ins(
+        "xml-stylesheet",
+        `type="text/xsl" href="${this.stylesheet}"`,
+      );
     }
 
     if (format === "atom") {

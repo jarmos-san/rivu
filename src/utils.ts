@@ -60,11 +60,11 @@ const isValidDate = (date: unknown): date is Date =>
 const hasMarkup = (value: string): boolean => /<[a-z][\s\S]*>/iu.test(value);
 
 /**
- * @description Conditionally applies the `isPermalink` attribute to `guid`
+ * @description Conditionally applies the `isPermaLink` attribute to `guid`
  * elements.
  *
  * If the element name is `'guid'`, this method checks whether the provided
- * value is a valid URL and sets the `isPermalink` attribute to `"true"` or
+ * value is a valid URL and sets the `isPermaLink` attribute to `"true"` or
  * `"false"` accordingly.
  *
  * @param { XMLBuilder } element - The XML builder instance for the current
@@ -81,7 +81,7 @@ function handleGUIDAttribute(
   value: string,
 ): void {
   if (name === "guid") {
-    element.att("isPermalink", isValidURL(value) ? "true" : "false");
+    element.att("isPermaLink", isValidURL(value) ? "true" : "false");
   }
 }
 

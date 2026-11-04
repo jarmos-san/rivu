@@ -71,7 +71,7 @@ describe("test the formatDate() helper function", () => {
 });
 
 describe("test the handleGUIDAttribute() helper function", () => {
-  it("should set isPermalink to true when name is guid and value is a valid URL", () => {
+  it("should set isPermaLink to true when name is guid and value is a valid URL", () => {
     expect.hasAssertions();
     const mockElement = {
       att: vi.fn<(name: string, value: string) => unknown>(),
@@ -80,12 +80,12 @@ describe("test the handleGUIDAttribute() helper function", () => {
     handleGUIDAttribute(mockElement, "guid", "https://example.com");
 
     expect(mockElement.att).toHaveBeenCalledExactlyOnceWith(
-      "isPermalink",
+      "isPermaLink",
       "true",
     );
   });
 
-  it("should set isPermalink to false when name is guid and value is an invalid URL", () => {
+  it("should set isPermaLink to false when name is guid and value is an invalid URL", () => {
     expect.hasAssertions();
     const mockElement = {
       att: vi.fn<(name: string, value: string) => unknown>(),
@@ -94,7 +94,7 @@ describe("test the handleGUIDAttribute() helper function", () => {
     handleGUIDAttribute(mockElement, "guid", "invalid-guid-string");
 
     expect(mockElement.att).toHaveBeenCalledExactlyOnceWith(
-      "isPermalink",
+      "isPermaLink",
       "false",
     );
   });
