@@ -39,6 +39,27 @@ function formatDate(date?: Date): string | undefined {
 }
 
 /**
+ * @description Checks whether a `Date` object holds a valid point in time.
+ *
+ * @param { unknown } date - The value to check.
+ *
+ * @returns { boolean } Returns true if `date` is a `Date` instance which does
+ *   not represent an invalid date, false otherwise.
+ */
+const isValidDate = (date: unknown): date is Date =>
+  date instanceof Date && !Number.isNaN(date.getTime());
+
+/**
+ * @description Checks whether a string contains HTML/XML markup tags.
+ *
+ * @param { string } value - The string to check.
+ *
+ * @returns { boolean } Returns true if `value` contains markup, false
+ *   otherwise.
+ */
+const hasMarkup = (value: string): boolean => /<[a-z][\s\S]*>/iu.test(value);
+
+/**
  * @description Conditionally applies the `isPermalink` attribute to `guid`
  * elements.
  *
@@ -84,7 +105,7 @@ function appendContent(
   value: string,
   cdata?: boolean,
 ): void {
-  const shouldUseCdata = cdata || /<[a-z][\s\S]*>/iu.test(value);
+  const shouldUseCdata = cdata || hasMarkup(value);
 
   if (shouldUseCdata) {
     element.dat(value);
@@ -93,4 +114,11 @@ function appendContent(
   }
 }
 
-export { isValidURL, formatDate, handleGUIDAttribute, appendContent };
+export {
+  isValidURL,
+  isValidDate,
+  formatDate,
+  hasMarkup,
+  handleGUIDAttribute,
+  appendContent,
+};
