@@ -225,7 +225,10 @@ export default class Feed implements RSS {
 
     // Conditionally insert stylesheet processing instructions if provided.
     if (this.stylesheet) {
-      document.ins("xml-stylesheet", `type="text/xsl" href=${this.stylesheet}`);
+      document.ins(
+        "xml-stylesheet",
+        `type="text/xsl" href="${this.stylesheet}"`,
+      );
     }
 
     // The XML document along with the root node named `<rss>`.
