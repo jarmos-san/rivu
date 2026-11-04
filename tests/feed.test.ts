@@ -38,3 +38,21 @@ describe("formatting", () => {
     expect(xml).toMatch(/\n\s*<channel>/u);
   });
 });
+
+describe("pubDate fields", () => {
+  it("formats channel and item pubDate as RFC 822", () => {
+    expect.hasAssertions();
+
+    const feed = new Feed({
+      description: "Test pubDate",
+      items: [{ pubDate: new Date("2025-10-10T00:00:00Z"), title: "Hello" }],
+      link: "https://example.com",
+      pubDate: new Date("2025-10-11T00:00:00Z"),
+      title: "Dates",
+    });
+    const xml = feed.generate();
+
+    expect(xml).toContain("<pubDate>Sat, 11 Oct 2025 00:00:00 GMT</pubDate>");
+    expect(xml).toContain("<pubDate>Fri, 10 Oct 2025 00:00:00 GMT</pubDate>");
+  });
+});
