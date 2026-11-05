@@ -267,6 +267,18 @@ interface RSS {
   generate: () => string;
 }
 
+/** @description A sub-element nested inside a channel or item element. */
+interface ChildNode {
+  /** @description The name of the sub-element, e.g. `url` or `hour`. */
+  name: string;
+
+  /** @description The value of the sub-element. */
+  value: unknown;
+
+  /** @description Whether to wrap the value in a CDATA section. */
+  cdata?: boolean;
+}
+
 interface BuildNodeOption {
   doc: XMLBuilder;
   name: keyof ChannelElements | keyof ItemElements;
@@ -292,6 +304,7 @@ export type {
   Days,
   Hour,
   BuildNodeOption,
+  ChildNode,
   ItemElements,
   ChannelElements,
   RSS,

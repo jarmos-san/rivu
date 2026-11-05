@@ -1,7 +1,7 @@
 import { create } from "xmlbuilder2";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 
-import addNestedChannelEls from "./channel.ts";
+import { imageNodes, listNodes, textInputNodes } from "./channel.ts";
 import type {
   BuildNodeOption,
   ChannelElements,
@@ -11,9 +11,31 @@ import type {
 import {
   handleGUIDAttribute,
   appendContent,
+  buildParent,
   formatDate,
   getStylesheetType,
+  isChildNodes,
 } from "./utils.ts";
+/**
+ * @description Appends one element per value, which allows repeatable elements
+ * such as `<category>`.
+ *
+ * @param { BuildNodeOption } options - The node name, values and CDATA flag.
+ */
+function buildScalars(options: BuildNodeOption): void {
+  const values: unknown[] = Array.isArray(options.value)
+    ? options.value
+    : [options.value];
+
+  for (const value of values) {
+    const stringValue = String(value);
+    const element = options.doc.ele(options.name);
+
+    handleGUIDAttribute(element, options.name, stringValue);
+    appendContent(element, stringValue, options.cdata);
+    element.up();
+  }
+}
 
 /**
  * @description Conditionally appends an XML element to the provided builder.
@@ -30,7 +52,10 @@ import {
  * as empty tags.
  *
  * If `value` is an array, one element is created per entry, which allows
- * repeatable elements such as `<category>`.
+ * repeatable elements such as `<category>`. If it is an array of
+ * {@link ChildNode} objects, a single element is created holding them as
+ * sub-elements, which covers `<image>`, `<textInput>`, `<skipHours>` and
+ * `<skipDays>`.
  *
  * Additionally, if the element is a `guid`, an `isPermaLink` attribute is
  * automatically added indicating whether the value is a valid URL.
@@ -43,17 +68,10 @@ function buildNode(options: BuildNodeOption): void {
     return;
   }
 
-  const values: unknown[] = Array.isArray(options.value)
-    ? options.value
-    : [options.value];
-
-  for (const value of values) {
-    const stringValue = String(value);
-    const element = options.doc.ele(options.name);
-
-    handleGUIDAttribute(element, options.name, stringValue);
-    appendContent(element, stringValue, options.cdata);
-    element.up();
+  if (isChildNodes(options.value)) {
+    buildParent(options.doc, options.name, options.value);
+  } else {
+    buildScalars(options);
   }
 }
 
@@ -143,6 +161,19 @@ export default class Feed implements RSS {
       { name: "generator", value: this.channelElements.generator },
       { name: "docs", value: this.channelElements.docs },
       { name: "ttl", value: this.channelElements.ttl },
+      { name: "image", value: imageNodes(this.channelElements) },
+      {
+        name: "textInput",
+        value: textInputNodes(this.channelElements.textInput),
+      },
+      {
+        name: "skipHours",
+        value: listNodes("hour", this.channelElements.skipHours),
+      },
+      {
+        name: "skipDays",
+        value: listNodes("day", this.channelElements.skipDays),
+      },
     ];
 
     for (const node of nodes) {
@@ -153,8 +184,6 @@ export default class Feed implements RSS {
         value: node.value,
       });
     }
-
-    addNestedChannelEls(document, this.channelElements);
   }
 
   /**

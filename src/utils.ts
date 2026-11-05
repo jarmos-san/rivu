@@ -1,5 +1,7 @@
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 
+import type { ChildNode } from "./types.ts";
+
 /**
  * @description Helper function to safely check if a string is a valid
  * HTTP/HTTPS URL.
@@ -108,7 +110,56 @@ function getStylesheetType(url: URL): "text/css" | "text/xsl" {
   return url.pathname.toLowerCase().endsWith(".css") ? "text/css" : "text/xsl";
 }
 
+/**
+ * @description Checks whether a node value is a list of sub-elements rather
+ * than a scalar or a list of scalars.
+ *
+ * @param { unknown } value - The value passed to `buildNode()`.
+ *
+ * @returns { boolean } Returns true if every entry is a {@link ChildNode}.
+ */
+function isChildNodes(value: unknown): value is ChildNode[] {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (entry) => typeof entry === "object" && entry !== null && "name" in entry,
+    )
+  );
+}
+
+const EMPTY = 0;
+
+/**
+ * @description Appends a parent element holding the given sub-elements, such as
+ * `<image>` or `<skipHours>`. Nothing is appended for an empty list.
+ *
+ * @param { XMLBuilder } doc - The node to append the parent element to.
+ * @param { string } name - The name of the parent element.
+ * @param { ChildNode[] } children - The sub-elements to append in order.
+ */
+function buildParent(
+  doc: XMLBuilder,
+  name: string,
+  children: ChildNode[],
+): void {
+  if (children.length === EMPTY) {
+    return;
+  }
+
+  const element = doc.ele(name);
+
+  for (const child of children) {
+    const childEl = element.ele(child.name);
+    appendContent(childEl, String(child.value), child.cdata);
+    childEl.up();
+  }
+
+  element.up();
+}
+
 export {
+  buildParent,
+  isChildNodes,
   isValidURL,
   formatDate,
   handleGUIDAttribute,
