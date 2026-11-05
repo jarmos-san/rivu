@@ -93,4 +93,25 @@ function appendContent(
   }
 }
 
-export { isValidURL, formatDate, handleGUIDAttribute, appendContent };
+/**
+ * @description Returns the MIME type for the `xml-stylesheet` processing
+ * instruction based on the stylesheet URL.
+ *
+ * A URL whose path ends in `.css` is typed as `text/css` and anything else is
+ * treated as an XSL stylesheet.
+ *
+ * @param { URL } url - The URL of the stylesheet.
+ *
+ * @returns { "text/css" | "text/xsl" } The stylesheet MIME type.
+ */
+function getStylesheetType(url: URL): "text/css" | "text/xsl" {
+  return url.pathname.toLowerCase().endsWith(".css") ? "text/css" : "text/xsl";
+}
+
+export {
+  isValidURL,
+  formatDate,
+  handleGUIDAttribute,
+  appendContent,
+  getStylesheetType,
+};

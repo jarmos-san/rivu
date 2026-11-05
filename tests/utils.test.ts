@@ -6,6 +6,7 @@ import {
   formatDate,
   handleGUIDAttribute,
   appendContent,
+  getStylesheetType,
 } from "../src/utils.ts";
 
 vi.setConfig({ testTimeout: 10_000 });
@@ -166,5 +167,21 @@ describe("test the appendContent() helper function", () => {
 
     expect(mockElement.txt).toHaveBeenCalledExactlyOnceWith("Hello World");
     expect(mockElement.dat).not.toHaveBeenCalled();
+  });
+});
+
+describe("test the getStylesheetType() helper function", () => {
+  it("should return text/css for a .css URL regardless of case or query", () => {
+    expect.hasAssertions();
+    expect(getStylesheetType(new URL("https://example.com/a.CSS?v=1"))).toBe(
+      "text/css",
+    );
+  });
+
+  it("should return text/xsl for any other URL", () => {
+    expect.hasAssertions();
+    expect(getStylesheetType(new URL("https://example.com/a.xsl"))).toBe(
+      "text/xsl",
+    );
   });
 });
