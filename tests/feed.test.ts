@@ -78,3 +78,36 @@ describe("stylesheet", () => {
     );
   });
 });
+
+describe("invalid dates", () => {
+  it("throws instead of emitting an invalid channel date", () => {
+    expect.hasAssertions();
+
+    const feed = new Feed({
+      description: "Invalid dates",
+      items: [],
+      lastBuildDate: new Date("not a date"),
+      link: "https://example.com",
+      title: "Invalid dates",
+    });
+
+    expect(() => feed.generate()).toThrow(
+      new RangeError('Invalid Date provided for "lastBuildDate"'),
+    );
+  });
+
+  it("throws instead of emitting an invalid item date", () => {
+    expect.hasAssertions();
+
+    const feed = new Feed({
+      description: "Invalid dates",
+      items: [{ pubDate: new Date("not a date"), title: "Item" }],
+      link: "https://example.com",
+      title: "Invalid dates",
+    });
+
+    expect(() => feed.generate()).toThrow(
+      new RangeError('Invalid Date provided for "pubDate"'),
+    );
+  });
+});

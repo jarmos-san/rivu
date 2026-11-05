@@ -129,10 +129,13 @@ export default class Feed implements RSS {
       { name: "copyright", value: this.channelElements.copyright },
       { name: "managingEditor", value: this.channelElements.managingEditor },
       { name: "webMaster", value: this.channelElements.webMaster },
-      { name: "pubDate", value: formatDate(this.channelElements.pubDate) },
+      {
+        name: "pubDate",
+        value: formatDate(this.channelElements.pubDate, "pubDate"),
+      },
       {
         name: "lastBuildDate",
-        value: formatDate(this.channelElements.lastBuildDate),
+        value: formatDate(this.channelElements.lastBuildDate, "lastBuildDate"),
       },
       { name: "category", value: this.channelElements.category },
       { name: "generator", value: this.channelElements.generator },
@@ -181,7 +184,7 @@ export default class Feed implements RSS {
         { name: "category", value: item.category },
         { name: "comments", value: item.comments },
         { name: "guid", value: item.guid },
-        { name: "pubDate", value: formatDate(item.pubDate) },
+        { name: "pubDate", value: formatDate(item.pubDate, "pubDate") },
       ];
 
       for (const node of itemNodes) {

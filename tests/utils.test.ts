@@ -69,6 +69,13 @@ describe("test the formatDate() helper function", () => {
     // @ts-expect-error - Testing runtime safety with invalid input type
     expect(formatDate("2025-10-10")).toBeUndefined();
   });
+
+  it("should throw a RangeError naming the field for an invalid Date", () => {
+    expect.hasAssertions();
+    expect(() => formatDate(new Date("not a date"), "pubDate")).toThrow(
+      new RangeError('Invalid Date provided for "pubDate"'),
+    );
+  });
 });
 
 describe("test the handleGUIDAttribute() helper function", () => {

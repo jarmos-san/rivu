@@ -25,17 +25,29 @@ function isValidURL(value: string): boolean {
  * which is achieved via the `Date.prototype.toUTCString()` method. If the
  * provided value is `undefined`, `null`, or not a `Date` instance, no output is
  * returned to ensure optional date fields are omitted in the rendered XML
- * output.
+ * output. An invalid `Date` (e.g. `new Date("not a date")`) throws instead of
+ * being serialized as `Invalid Date`.
  *
  * @param { Date | null | undefined } date - The date value to format. May be a
  *   `Date` object, `null`, or `undefined`.
+ * @param { string } [field] - The name of the field being formatted, used in
+ *   the error message.
  *
  * @returns { string | undefined } A UTC-formatted date string if `date` is a
  *   valid `Date` instance, otherwise `undefined` allowing the caller to skip
  *   serialization.
+ * @throws { RangeError } If `date` is an invalid `Date`.
  */
-function formatDate(date?: Date): string | undefined {
-  return date instanceof Date ? date.toUTCString() : undefined;
+function formatDate(date?: Date, field = "date"): string | undefined {
+  if (!(date instanceof Date)) {
+    return undefined;
+  }
+
+  if (Number.isNaN(date.getTime())) {
+    throw new RangeError(`Invalid Date provided for "${field}"`);
+  }
+
+  return date.toUTCString();
 }
 
 /**
