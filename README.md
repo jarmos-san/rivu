@@ -1,72 +1,109 @@
-# Rivu - Type-Safe RSS 2.0 Feed Generator
+# rivu
 
-Rivu is a modern TypeScript library for generating RSS 2.0 feeds
-programmatically. It enforces strict type safety, validates required channel
-metadata and produces a fully compliant RSS feed as an XML document.
+[![npm version](https://img.shields.io/npm/v/rivu)](https://www.npmjs.com/package/rivu)
+[![Run tests](https://github.com/jarmos-san/rivu/actions/workflows/run-tests.yml/badge.svg)](https://github.com/jarmos-san/rivu/actions/workflows/run-tests.yml)
+[![QA checks](https://github.com/jarmos-san/rivu/actions/workflows/qa-checks.yml/badge.svg)](https://github.com/jarmos-san/rivu/actions/workflows/qa-checks.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-## Features
+rivu is a type-safe RSS 2.0 feed generator for TypeScript and JavaScript. You
+describe a channel and its items as plain objects, call `generate()` and get
+back an XML string. There is nothing to configure and one runtime dependency,
+[xmlbuilder2](https://oozcitak.github.io/xmlbuilder2/).
 
-Rivu provides the following functionalities:
+## Install
 
-- 100% RSS 2.0 compliant output.
-- Lightweight and fast (based on Node.js).
-- Fully type-safe using TypeScript interfaces.
-- Strict validation for required RSS channel fields.
-- Custom feed items with rich optional metadata.
-- Small footprint and works in Node.js and other JavaScript runtimes.
-
-Install Rivu right now using the following commands:
-
-```console
-pnpm i rivu
+```bash
+pnpm add rivu
 ```
 
-## Quick Usage
+It also works with `npm install rivu`, `yarn add rivu` and `bun add rivu`.
 
-You can quickly generate a RSS 2.0 output with the following lines of code:
+## Example
 
-```typescript
+```ts
 import { Feed } from "rivu";
 
 const feed = new Feed(
   {
-    title: "Somraj's Blog",
-    link: "https://jarmos.dev",
-    description:
-      "The personal blog (and digital garden) maintained by Somraj Saha (aka Jarmos).",
+    title: "Example Blog",
+    link: "https://example.com",
+    description: "Notes on building things.",
     language: "en-US",
+    lastBuildDate: new Date("2025-10-12T09:30:00Z"),
     items: [
       {
-        title: "Example Blog",
-        description: "Lorem Ipsum",
-        pubDate: new Date("2025-10-10"),
+        title: "Hello, world",
+        link: "https://example.com/posts/hello-world",
+        description: "<p>The first post.</p>",
+        author: "jane@example.com (Jane Doe)",
+        category: ["intro", "meta"],
+        guid: "https://example.com/posts/hello-world",
+        pubDate: new Date("2025-10-10T08:00:00Z"),
       },
     ],
   },
   {
-    feedURL: "https://jarmos.dev/rss.xml",
-    stylesheet: new URL("https://jarmos.dev/rss.xsl"),
+    feedURL: "https://example.com/rss.xml",
+    stylesheet: new URL("https://example.com/rss.xsl"),
   },
 );
 
-feed.generate();
+console.log(feed.generate());
 ```
 
-This should print a full RSS 2.0 feed as a string like this:
+`generate()` returns:
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://jarmos.dev/rss.xsl"?>
-<rss version="2.0">
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="https://example.com/rss.xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    ...
+    <atom:link href="https://example.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <title><![CDATA[Example Blog]]></title>
+    <link>https://example.com</link>
+    <description><![CDATA[Notes on building things.]]></description>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 12 Oct 2025 09:30:00 GMT</lastBuildDate>
+    <item>
+      <title><![CDATA[Hello, world]]></title>
+      <link>https://example.com/posts/hello-world</link>
+      <description><![CDATA[<p>The first post.</p>]]></description>
+      <author>jane@example.com (Jane Doe)</author>
+      <category>intro</category>
+      <category>meta</category>
+      <guid isPermaLink="true">https://example.com/posts/hello-world</guid>
+      <pubDate>Fri, 10 Oct 2025 08:00:00 GMT</pubDate>
+    </item>
   </channel>
 </rss>
 ```
 
-For more information with regards to the API reference, a more detailed usage
-guide and the contribution guidelines, check out
-[the official documentation](https://rivu.jarmos.dev).
+## What it handles for you
+
+- Typed input: `ChannelElements`, `FeedOptions`, `Days`, `Hour` and `RSS` are
+  exported.
+- `Date` values are written as RFC 822 strings.
+- `title` and `description` are always CDATA. Other fields use CDATA when they
+  contain markup and are escaped otherwise.
+- `undefined` and `null` fields are omitted instead of emitted empty.
+- `category` accepts a string or an array and writes one element per entry.
+- `guid` is marked `isPermaLink="true"` for http(s) URLs and `"false"`
+  otherwise.
+- `feedURL` adds an `<atom:link rel="self">` element.
+- `stylesheet` adds an `<?xml-stylesheet?>` instruction, typed `text/css` for
+  `.css` URLs and `text/xsl` otherwise.
+
+See [troubleshooting](https://rivu.jarmos.dev/docs/troubleshooting) for the
+current limitations.
+
+## Documentation
+
+- [Getting started](https://rivu.jarmos.dev/docs/getting-started)
+- [API reference](https://rivu.jarmos.dev/docs/api/feed)
+- [Serve a feed from a Nuxt or Nitro route](https://rivu.jarmos.dev/docs/guides/nuxt-nitro-route)
+- [Style a feed with XSL](https://rivu.jarmos.dev/docs/guides/styling-with-xsl)
+- [Validate your feed](https://rivu.jarmos.dev/docs/guides/validating-your-feed)
+- [Troubleshooting](https://rivu.jarmos.dev/docs/troubleshooting)
 
 ## Licensing and Distribution Rights
 
