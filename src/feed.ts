@@ -7,7 +7,12 @@ import type {
   RSS,
   StyleSheet,
 } from "./types.ts";
-import { handleGUIDAttribute, appendContent, formatDate } from "./utils.ts";
+import {
+  handleGUIDAttribute,
+  appendContent,
+  formatDate,
+  getStylesheetType,
+} from "./utils.ts";
 
 /**
  * @description Conditionally appends an XML element to the provided builder.
@@ -227,7 +232,7 @@ export default class Feed implements RSS {
     if (this.stylesheet) {
       document.ins(
         "xml-stylesheet",
-        `type="text/xsl" href="${this.stylesheet}"`,
+        `type="${getStylesheetType(this.stylesheet)}" href="${this.stylesheet}"`,
       );
     }
 
