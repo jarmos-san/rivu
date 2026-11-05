@@ -28,20 +28,26 @@ You can quickly generate a RSS 2.0 output with the following lines of code:
 ```typescript
 import { Feed } from "rivu";
 
-const feed = new Feed({
-  title: "Somraj's Blog",
-  link: "https://jarmos.dev/rss.xml",
-  description:
-    "The personal blog (and digital garden) maintained by Somraj Saha (aka Jarmos).",
-  language: "en-US",
-  items: [
-    {
-      title: "Example Blog",
-      description: "Lorem Ipsum",
-      pubDate: new Date("2025-10-10"),
-    },
-  ],
-});
+const feed = new Feed(
+  {
+    title: "Somraj's Blog",
+    link: "https://jarmos.dev",
+    description:
+      "The personal blog (and digital garden) maintained by Somraj Saha (aka Jarmos).",
+    language: "en-US",
+    items: [
+      {
+        title: "Example Blog",
+        description: "Lorem Ipsum",
+        pubDate: new Date("2025-10-10"),
+      },
+    ],
+  },
+  {
+    feedURL: "https://jarmos.dev/rss.xml",
+    stylesheet: new URL("https://jarmos.dev/rss.xsl"),
+  },
+);
 
 feed.generate();
 ```
@@ -50,6 +56,7 @@ This should print a full RSS 2.0 feed as a string like this:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://jarmos.dev/rss.xsl"?>
 <rss version="2.0">
   <channel>
     ...

@@ -274,10 +274,17 @@ interface BuildNodeOption {
 }
 
 /**
- * @description Represents the URL to access the XSL/CSS stylesheet to be used
- * for styling the XML document.
+ * @description Document-level settings passed as the second `Feed` argument,
+ * kept apart from {@link ChannelElements} because RSS 2.0 does not define
+ * them.
  */
-type StyleSheet = URL;
+interface FeedOptions {
+  /** @description Stylesheet URL emitted as an `<?xml-stylesheet?>` instruction. */
+  stylesheet?: URL;
+
+  /** @description The feed's own URL, emitted as `<atom:link rel="self">`. */
+  feedURL?: string | URL;
+}
 
 export type {
   Days,
@@ -286,5 +293,5 @@ export type {
   ItemElements,
   ChannelElements,
   RSS,
-  StyleSheet,
+  FeedOptions,
 };
