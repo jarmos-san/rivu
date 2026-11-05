@@ -58,4 +58,23 @@ describe("stylesheet", () => {
       '<?xml-stylesheet type="text/xsl" href="https://example.com/rss.xsl"?>',
     );
   });
+
+  it("types a .css stylesheet as text/css", () => {
+    expect.hasAssertions();
+
+    const feed = new Feed(
+      {
+        description: "Test stylesheet",
+        items: [],
+        link: "https://example.com",
+        title: "Stylesheet",
+      },
+      new URL("https://example.com/rss.CSS?v=2"),
+    );
+    const xml = feed.generate();
+
+    expect(xml).toContain(
+      '<?xml-stylesheet type="text/css" href="https://example.com/rss.CSS?v=2"?>',
+    );
+  });
 });
