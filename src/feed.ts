@@ -1,6 +1,7 @@
 import { create } from "xmlbuilder2";
 import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 
+import { addImageEl, addListEl, addTextInputEl } from "./channel.ts";
 import type {
   BuildNodeOption,
   ChannelElements,
@@ -133,9 +134,6 @@ export default class Feed implements RSS {
       { name: "generator", value: this.channelElements.generator },
       { name: "docs", value: this.channelElements.docs },
       { name: "ttl", value: this.channelElements.ttl },
-      { name: "image", value: this.channelElements.image },
-      { name: "skipHours", value: this.channelElements.skipHours },
-      { name: "skipDays", value: this.channelElements.skipDays },
     ];
 
     for (const node of nodes) {
@@ -146,6 +144,21 @@ export default class Feed implements RSS {
         value: node.value,
       });
     }
+
+    addImageEl(document, this.channelElements);
+    addTextInputEl(document, this.channelElements.textInput);
+    addListEl({
+      child: "hour",
+      doc: document,
+      parent: "skipHours",
+      values: this.channelElements.skipHours,
+    });
+    addListEl({
+      child: "day",
+      doc: document,
+      parent: "skipDays",
+      values: this.channelElements.skipDays,
+    });
   }
 
   /**
