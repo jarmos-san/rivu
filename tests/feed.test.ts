@@ -21,6 +21,24 @@ describe("date fields", () => {
     expect(xml).not.toContain("<pubDate>");
     expect(xml).not.toContain("<lastBuildDate>");
   });
+
+  it("omits date fields holding an invalid Date", () => {
+    expect.hasAssertions();
+
+    const feed = new Feed({
+      description: "invalid dates",
+      items: [{ pubDate: new Date("not a date"), title: "Item" }],
+      lastBuildDate: new Date("not a date"),
+      link: "https://example.com",
+      pubDate: new Date("not a date"),
+      title: "Invalid dates",
+    });
+    const xml = feed.generate();
+
+    expect(xml).not.toContain("Invalid Date");
+    expect(xml).not.toContain("<pubDate>");
+    expect(xml).not.toContain("<lastBuildDate>");
+  });
 });
 
 describe("formatting", () => {

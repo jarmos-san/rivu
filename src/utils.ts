@@ -23,9 +23,9 @@ function isValidURL(value: string): boolean {
  *
  * RSS 2.0 requires the date values to be formatted using the RFC 822 format,
  * which is achieved via the `Date.prototype.toUTCString()` method. If the
- * provided value is `undefined`, `null`, or not a `Date` instance, no output is
- * returned to ensure optional date fields are omitted in the rendered XML
- * output.
+ * provided value is `undefined`, `null`, not a `Date` instance or an invalid
+ * `Date` (e.g. `new Date("not a date")`), no output is returned to ensure
+ * optional date fields are omitted in the rendered XML output.
  *
  * @param { Date | null | undefined } date - The date value to format. May be a
  *   `Date` object, `null`, or `undefined`.
@@ -35,7 +35,9 @@ function isValidURL(value: string): boolean {
  *   serialization.
  */
 function formatDate(date?: Date): string | undefined {
-  return date instanceof Date ? date.toUTCString() : undefined;
+  return date instanceof Date && !Number.isNaN(date.getTime())
+    ? date.toUTCString()
+    : undefined;
 }
 
 /**

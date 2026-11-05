@@ -68,6 +68,11 @@ describe("test the formatDate() helper function", () => {
     // @ts-expect-error - Testing runtime safety with invalid input type
     expect(formatDate("2025-10-10")).toBeUndefined();
   });
+
+  it("should return undefined for an invalid Date instance", () => {
+    expect.hasAssertions();
+    expect(formatDate(new Date("not a date"))).toBeUndefined();
+  });
 });
 
 describe("test the handleGUIDAttribute() helper function", () => {
