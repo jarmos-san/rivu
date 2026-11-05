@@ -4,8 +4,8 @@ import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 import type {
   BuildNodeOption,
   ChannelElements,
+  FeedOptions,
   RSS,
-  StyleSheet,
 } from "./types.ts";
 import {
   handleGUIDAttribute,
@@ -67,10 +67,10 @@ export default class Feed implements RSS {
   private readonly channelElements: ChannelElements;
 
   /**
-   * @description An optional stylesheet URL to be injected as an XML processing
-   * instruction at the document root.
+   * @description Options controlling how the document is generated, such as the
+   * stylesheet and the feed's own URL.
    */
-  private readonly stylesheet?: StyleSheet;
+  private readonly options: FeedOptions;
 
   /**
    * @description Creates a new `RSS` feed instance with the provided channel
@@ -80,17 +80,12 @@ export default class Feed implements RSS {
    *   RSS channel. This must include the required properties defined in
    *   {@link ChannelElements}, such as `title`, `link` and `description`. The
    *   optional fields may also be provided to supply extended metadata.
-   * @param { URL } stylesheet - Optional URL to an XSL/CSS stylesheet.
+   * @param { FeedOptions } [options] - Optional settings such as the
+   *   `stylesheet` URL and the `feedURL` the feed is served from.
    */
-  public constructor(
-    channelElements: ChannelElements,
-    stylesheet?: StyleSheet,
-  ) {
+  public constructor(channelElements: ChannelElements, options?: FeedOptions) {
     this.channelElements = channelElements;
-
-    if (stylesheet) {
-      this.stylesheet = stylesheet;
-    }
+    this.options = options ?? {};
   }
 
   /**
@@ -229,10 +224,10 @@ export default class Feed implements RSS {
     const document = create({ version: "1.0" });
 
     // Conditionally insert stylesheet processing instructions if provided.
-    if (this.stylesheet) {
+    if (this.options.stylesheet) {
       document.ins(
         "xml-stylesheet",
-        `type="${getStylesheetType(this.stylesheet)}" href="${this.stylesheet}"`,
+        `type="${getStylesheetType(this.options.stylesheet)}" href="${this.options.stylesheet}"`,
       );
     }
 
@@ -244,10 +239,10 @@ export default class Feed implements RSS {
     // Construct the `<channel>` node in the tree.
     const channel = rss.ele("channel");
 
-    if (this.channelElements.feedUrl) {
+    if (this.options.feedURL) {
       channel
         .ele("atom:link", {
-          href: String(this.channelElements.feedUrl),
+          href: String(this.options.feedURL),
           rel: "self",
           type: "application/rss+xml",
         })

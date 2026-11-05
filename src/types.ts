@@ -149,13 +149,6 @@ interface ChannelElements {
   /** @description The canonical URL corresponding to the feed's website. */
   link: string;
 
-  /**
-   * @description The URL the feed itself is served from (e.g.
-   * `https://example.com/rss.xml`). When provided, it is emitted as the
-   * `<atom:link rel="self">` element. The element is omitted otherwise.
-   */
-  feedUrl?: string | URL | null;
-
   /** @description A short explanation of the feed's purpose. */
   description: string;
 
@@ -280,6 +273,19 @@ interface BuildNodeOption {
  */
 type StyleSheet = URL;
 
+/** @description Options for generating the feed outside of `<channel>`. */
+interface FeedOptions {
+  /** @description Optional URL to an XSL/CSS stylesheet. */
+  stylesheet?: StyleSheet;
+
+  /**
+   * @description The URL the feed itself is served from (e.g.
+   * `https://example.com/rss.xml`). When provided, it is emitted as the
+   * `<atom:link rel="self">` element. The element is omitted otherwise.
+   */
+  feedURL?: string | URL;
+}
+
 export type {
   Days,
   Hour,
@@ -288,4 +294,5 @@ export type {
   ChannelElements,
   RSS,
   StyleSheet,
+  FeedOptions,
 };
