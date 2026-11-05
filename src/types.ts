@@ -110,7 +110,7 @@ interface ItemElements {
    * @description One or more categories or tags describing the topic of the
    * item. Each one is emitted as its own `<category>` element.
    */
-  category?: string | string[] | null;
+  category?: string | string[];
 
   /**
    * @description A link to the comments page or discussion thread related to
@@ -186,7 +186,7 @@ interface ChannelElements {
    * @description One or more categories or classifications of the feed. Each
    * one is emitted as its own `<category>` element.
    */
-  category?: string | string[] | null;
+  category?: string | string[];
 
   /** @description The software used to generated the feed. */
   generator?: string | null;
