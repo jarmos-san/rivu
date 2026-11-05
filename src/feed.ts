@@ -29,6 +29,9 @@ import {
  * RSS fields are omitted entirely from the final output rather than appearing
  * as empty tags.
  *
+ * If `value` is an array, one element is created per entry, which allows
+ * repeatable elements such as `<category>`.
+ *
  * Additionally, if the element is a `guid`, an `isPermaLink` attribute is
  * automatically added indicating whether the value is a valid URL.
  *
@@ -40,12 +43,18 @@ function buildNode(options: BuildNodeOption): void {
     return;
   }
 
-  const stringValue = String(options.value);
-  const element = options.doc.ele(options.name);
+  const values: unknown[] = Array.isArray(options.value)
+    ? options.value
+    : [options.value];
 
-  handleGUIDAttribute(element, options.name, stringValue);
-  appendContent(element, stringValue, options.cdata);
-  element.up();
+  for (const value of values) {
+    const stringValue = String(value);
+    const element = options.doc.ele(options.name);
+
+    handleGUIDAttribute(element, options.name, stringValue);
+    appendContent(element, stringValue, options.cdata);
+    element.up();
+  }
 }
 
 /**
