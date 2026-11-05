@@ -278,11 +278,7 @@ interface FeedOptions {
   /** @description Optional URL to an XSL/CSS stylesheet. */
   stylesheet?: StyleSheet;
 
-  /**
-   * @description The URL the feed itself is served from (e.g.
-   * `https://example.com/rss.xml`). When provided, it is emitted as the
-   * `<atom:link rel="self">` element. The element is omitted otherwise.
-   */
+  /** @description The feed's own URL, used for `<atom:link rel="self">`. */
   feedURL?: string | URL;
 }
 
