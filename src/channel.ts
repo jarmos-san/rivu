@@ -124,4 +124,28 @@ function addListEl(options: ListNodeOption): void {
   }
 }
 
-export { addImageEl, addListEl, addTextInputEl };
+/**
+ * @description Appends the `<channel>` elements that need sub-elements:
+ * `<image>`, `<textInput>`, `<skipHours>` and `<skipDays>`.
+ *
+ * @param { XMLBuilder } doc - The `<channel>` XML node.
+ * @param { ChannelElements } channel - The channel metadata.
+ */
+function addNestedChannelEls(doc: XMLBuilder, channel: ChannelElements): void {
+  addImageEl(doc, channel);
+  addTextInputEl(doc, channel.textInput);
+  addListEl({
+    child: "hour",
+    doc,
+    parent: "skipHours",
+    values: channel.skipHours,
+  });
+  addListEl({
+    child: "day",
+    doc,
+    parent: "skipDays",
+    values: channel.skipDays,
+  });
+}
+
+export default addNestedChannelEls;
