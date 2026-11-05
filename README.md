@@ -30,7 +30,8 @@ import { Feed } from "rivu";
 
 const feed = new Feed({
   title: "Somraj's Blog",
-  link: "https://jarmos.dev/rss.xml",
+  link: "https://jarmos.dev",
+  feedUrl: "https://jarmos.dev/rss.xml",
   description:
     "The personal blog (and digital garden) maintained by Somraj Saha (aka Jarmos).",
   language: "en-US",

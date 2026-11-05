@@ -238,13 +238,16 @@ export default class Feed implements RSS {
 
     // Construct the `<channel>` node in the tree.
     const channel = rss.ele("channel");
-    channel
-      .ele("atom:link", {
-        href: `${this.channelElements.link}`,
-        rel: "self",
-        type: "application/rss+xml",
-      })
-      .up();
+
+    if (this.channelElements.feedUrl) {
+      channel
+        .ele("atom:link", {
+          href: String(this.channelElements.feedUrl),
+          rel: "self",
+          type: "application/rss+xml",
+        })
+        .up();
+    }
 
     // Build the `<channel>` and its child `<item>` nodes
     this.addChannelEl(channel);
