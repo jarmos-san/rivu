@@ -65,12 +65,24 @@ function handleGUIDAttribute(
 }
 
 /**
+ * @description Matches characters outside the XML 1.0 `Char` production, which
+ * would make the generated document unparseable.
+ *
+ * @see https://www.w3.org/TR/xml/#charsets
+ */
+const INVALID_XML_CHARS =
+  /[^\t\n\r\u0020-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/gu;
+
+/**
  * @description Appends text content or a CDATA section to the provided XML
  * element.
  *
  * By default, text content is safely escaped using `.txt()`. If `cdata` is set
  * to `true` or if HTML/markup tags are automatically detected in the value, the
- * content is wrapped in a CDATA section (`<![CDATA[...]]>`) using `.dat()`.
+ * content is wrapped in a CDATA section (`<![CDATA[...]]>`) using `.dat()`. A
+ * value containing `]]>` cannot live inside CDATA, so it is always escaped with
+ * `.txt()` instead. Characters that XML 1.0 does not allow (e.g. most control
+ * characters) are removed first.
  *
  * @param { XMLBuilder } element - The XML builder instance to append content
  *   to.
@@ -84,12 +96,14 @@ function appendContent(
   value: string,
   cdata?: boolean,
 ): void {
-  const shouldUseCdata = cdata || /<[a-z][\s\S]*>/iu.test(value);
+  const text = value.replaceAll(INVALID_XML_CHARS, "");
+  const shouldUseCdata =
+    !text.includes("]]>") && (cdata || /<[a-z][\s\S]*>/iu.test(text));
 
   if (shouldUseCdata) {
-    element.dat(value);
+    element.dat(text);
   } else {
-    element.txt(value);
+    element.txt(text);
   }
 }
 

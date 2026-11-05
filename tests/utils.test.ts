@@ -167,4 +167,29 @@ describe("test the appendContent() helper function", () => {
     expect(mockElement.txt).toHaveBeenCalledExactlyOnceWith("Hello World");
     expect(mockElement.dat).not.toHaveBeenCalled();
   });
+
+  it("should use .txt() when the value contains ]]> even if cdata is true", () => {
+    expect.hasAssertions();
+    const mockElement = {
+      dat: vi.fn<(value: string) => unknown>(),
+      txt: vi.fn<(value: string) => unknown>(),
+    } as unknown as XMLBuilder;
+
+    appendContent(mockElement, "<p>a ]]> b</p>", true);
+
+    expect(mockElement.txt).toHaveBeenCalledExactlyOnceWith("<p>a ]]> b</p>");
+    expect(mockElement.dat).not.toHaveBeenCalled();
+  });
+
+  it("should strip characters that are not allowed in XML", () => {
+    expect.hasAssertions();
+    const mockElement = {
+      dat: vi.fn<(value: string) => unknown>(),
+      txt: vi.fn<(value: string) => unknown>(),
+    } as unknown as XMLBuilder;
+
+    appendContent(mockElement, "a\u0001b\uFFFEc\td 🚀");
+
+    expect(mockElement.txt).toHaveBeenCalledExactlyOnceWith("abc\td 🚀");
+  });
 });
