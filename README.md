@@ -45,6 +45,7 @@ const feed = new Feed(
   },
   {
     feedURL: "https://jarmos.dev/rss.xml",
+    stylesheet: new URL("https://jarmos.dev/rss.xsl"),
   },
 );
 
@@ -55,6 +56,7 @@ This should print a full RSS 2.0 feed as a string like this:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://jarmos.dev/rss.xsl"?>
 <rss version="2.0">
   <channel>
     ...
