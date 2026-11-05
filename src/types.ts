@@ -274,25 +274,15 @@ interface BuildNodeOption {
 }
 
 /**
- * @description Settings that shape the generated XML document but are not part
- * of the RSS 2.0 `<channel>` element itself, so they do not belong in
- * {@link ChannelElements}. Pass an instance as the second argument of the
- * `Feed` constructor; every property is optional and the document is generated
- * without the corresponding output when a property is omitted.
+ * @description Document-level settings passed as the second `Feed` argument,
+ * kept apart from {@link ChannelElements} because RSS 2.0 does not define
+ * them.
  */
 interface FeedOptions {
-  /**
-   * @description URL of an XSL or CSS stylesheet, emitted as an
-   * `<?xml-stylesheet?>` processing instruction so browsers render the feed
-   * with it.
-   */
+  /** @description Stylesheet URL emitted as an `<?xml-stylesheet?>` instruction. */
   stylesheet?: URL;
 
-  /**
-   * @description The public URL the feed is served from (e.g.
-   * `https://example.com/rss.xml`), emitted as `<atom:link rel="self">` so
-   * readers can tell the feed's address apart from the website's `link`.
-   */
+  /** @description The feed's own URL, emitted as `<atom:link rel="self">`. */
   feedURL?: string | URL;
 }
 
