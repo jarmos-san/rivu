@@ -106,8 +106,11 @@ interface ItemElements {
    */
   author?: string | null;
 
-  /** @description A category or tag describing the topic of the item. */
-  category?: string | null;
+  /**
+   * @description One or more categories or tags describing the topic of the
+   * item. Each one is emitted as its own `<category>` element.
+   */
+  category?: string | string[] | null;
 
   /**
    * @description A link to the comments page or discussion thread related to
@@ -179,8 +182,11 @@ interface ChannelElements {
   /** @description The last time the feed content was modified. */
   lastBuildDate?: Date;
 
-  /** @description A category or classification of the feed. */
-  category?: string | null;
+  /**
+   * @description One or more categories or classifications of the feed. Each
+   * one is emitted as its own `<category>` element.
+   */
+  category?: string | string[] | null;
 
   /** @description The software used to generated the feed. */
   generator?: string | null;
