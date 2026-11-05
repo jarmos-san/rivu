@@ -3,6 +3,8 @@ import type { XMLBuilder } from "xmlbuilder2/lib/interfaces.js";
 import type { ChannelElements, TextInput } from "./types.ts";
 import { appendContent } from "./utils.ts";
 
+const EMPTY = 0;
+
 /** @description A single sub-element to append under a parent element. */
 interface ChildNode {
   /** @description The name of the sub-element. */
@@ -104,28 +106,22 @@ function addTextInputEl(doc: XMLBuilder, textInput?: TextInput | null): void {
  * such as `<skipHours><hour>0</hour></skipHours>`.
  *
  * A single value is treated as a one-item list and duplicate values are only
- * emitted once. Nothing is appended if no values were provided.
+ * emitted once. Nothing is appended if no values were provided or the list is
+ * empty.
  *
  * @param { ListNodeOption } options - The parent and child element names along
  *   with the values to serialize.
  */
 function addListEl(options: ListNodeOption): void {
-  if (options.values === undefined || options.values === null) {
-    return;
+  const values = [...new Set([options.values ?? []].flat())];
+
+  if (values.length > EMPTY) {
+    appendParent(
+      options.doc,
+      options.parent,
+      values.map((value) => ({ name: options.child, value: String(value) })),
+    );
   }
-
-  const values = Array.isArray(options.values)
-    ? options.values
-    : [options.values];
-
-  appendParent(
-    options.doc,
-    options.parent,
-    [...new Set(values)].map((value) => ({
-      name: options.child,
-      value: String(value),
-    })),
-  );
 }
 
 export { addImageEl, addListEl, addTextInputEl };

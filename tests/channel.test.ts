@@ -104,6 +104,15 @@ describe("skipHours and skipDays", () => {
     );
   });
 
+  it("omits both elements for empty lists", () => {
+    expect.hasAssertions();
+
+    const xml = generate({ skipDays: [], skipHours: [] });
+
+    expect(xml).not.toContain("<skipHours");
+    expect(xml).not.toContain("<skipDays");
+  });
+
   it("omits both elements when not given", () => {
     expect.hasAssertions();
 
