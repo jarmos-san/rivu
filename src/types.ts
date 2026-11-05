@@ -274,12 +274,6 @@ interface BuildNodeOption {
 }
 
 /**
- * @description Represents the URL to access the XSL/CSS stylesheet to be used
- * for styling the XML document.
- */
-type StyleSheet = URL;
-
-/**
  * @description Settings that shape the generated XML document but are not part
  * of the RSS 2.0 `<channel>` element itself, so they do not belong in
  * {@link ChannelElements}. Pass an instance as the second argument of the
@@ -292,7 +286,7 @@ interface FeedOptions {
    * `<?xml-stylesheet?>` processing instruction so browsers render the feed
    * with it.
    */
-  stylesheet?: StyleSheet;
+  stylesheet?: URL;
 
   /**
    * @description The public URL the feed is served from (e.g.
@@ -309,6 +303,5 @@ export type {
   ItemElements,
   ChannelElements,
   RSS,
-  StyleSheet,
   FeedOptions,
 };
