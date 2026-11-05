@@ -61,6 +61,7 @@ export default defineConfig({
     "import/no-default-export": "allow",
     "import/no-named-export": "off",
     "import/no-nodejs-modules": "off",
+    "max-lines": ["error", { skipBlankLines: true }],
     "no-ternary": "allow",
     "no-undefined": "off",
     "one-var": "off",
