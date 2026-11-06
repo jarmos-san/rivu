@@ -15,58 +15,100 @@ Rivu provides the following functionalities:
 - Custom feed items with rich optional metadata.
 - Small footprint and works in Node.js and other JavaScript runtimes.
 
-Install Rivu right now using the following commands:
+<details>
+<summary>Install Rivu</summary>
+### `npm`
 
 ```console
-pnpm i rivu
+npm install rivu
 ```
 
-## Quick Usage
-
-You can quickly generate a RSS 2.0 output with the following lines of code:
-
-```typescript
-import { Feed } from "rivu";
-
-const feed = new Feed(
-  {
-    title: "Somraj's Blog",
-    link: "https://jarmos.dev",
-    description:
-      "The personal blog (and digital garden) maintained by Somraj Saha (aka Jarmos).",
-    language: "en-US",
-    items: [
-      {
-        title: "Example Blog",
-        description: "Lorem Ipsum",
-        pubDate: new Date("2025-10-10"),
-      },
-    ],
-  },
-  {
-    feedURL: "https://jarmos.dev/rss.xml",
-    stylesheet: new URL("https://jarmos.dev/rss.xsl"),
-  },
-);
-
-feed.generate();
+```console
+pnpm add rivu
 ```
 
-This should print a full RSS 2.0 feed as a string like this:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://jarmos.dev/rss.xsl"?>
-<rss version="2.0">
-  <channel>
-    ...
-  </channel>
-</rss>
+```console
+yarn add rivu
 ```
 
-For more information with regards to the API reference, a more detailed usage
-guide and the contribution guidelines, check out
-[the official documentation](https://rivu.jarmos.dev).
+</details>
+
+## Getting Started
+
+With Rivu installed and ready for use, you can get started with the package by
+following these instructions:
+
+1. Create a TypeScript file (for example, `feed.ts`) and ensure the file can be
+   executed using Node.js.
+
+2. Add the following contents the `feed.ts` file:
+
+   ```ts
+   import Feed from "rivu";
+
+   const feed = new Feed(
+     {
+       // See https://www.rssboard.org/rss-specification for reference.
+       title: "Example Blog",
+       link: "https://example.com",
+       description: "Notes on building things.",
+       language: "en-US",
+       lastBuildDate: new Date("2025-10-12T09:30:00Z"),
+       items: [
+         {
+           title: "Hello, world",
+           link: "https://example.com/posts/hello-world",
+           description: "<p>The first post.</p>",
+           author: "jane@example.com (Jane Doe)",
+           category: ["intro", "meta"],
+           guid: "https://example.com/posts/hello-world",
+           pubDate: new Date("2025-10-10T08:00:00Z"),
+         },
+       ],
+     },
+     {
+       // Additional metadata and configuration options required to enhance the RSS feed
+       // output.
+       feedURL: "https://example.com/rss.xml",
+       stylesheet: new URL("https://example.com/rss.xsl"),
+     },
+   );
+
+   console.log(feed.generate());
+   ```
+
+3. Run the script using the `node feed.ts` command in your terminal. You should
+   expect the following output thereafter:
+
+   ```xml
+    <?xml version="1.0"?>
+    <?xml-stylesheet type="text/xsl" href="https://example.com/rss.xsl"?>
+    <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+      <channel>
+        <atom:link href="https://example.com/rss.xml" rel="self" type="application/rss+xml"/>
+        <title><![CDATA[Example Blog]]></title>
+        <link>https://example.com</link>
+        <description><![CDATA[Notes on building things.]]></description>
+        <language>en-US</language>
+        <lastBuildDate>Sun, 12 Oct 2025 09:30:00 GMT</lastBuildDate>
+        <item>
+          <title><![CDATA[Hello, world]]></title>
+          <link>https://example.com/posts/hello-world</link>
+          <description><![CDATA[<p>The first post.</p>]]></description>
+          <author>jane@example.com (Jane Doe)</author>
+          <category>intro</category>
+          <category>meta</category>
+          <guid isPermaLink="true">https://example.com/posts/hello-world</guid>
+          <pubDate>Fri, 10 Oct 2025 08:00:00 GMT</pubDate>
+        </item>
+      </channel>
+    </rss>
+   ```
+
+Refer to the official documentation here -
+[rivu.jarmos.dev](https://rivu.jarmos.dev) and the
+[RSS 2.0 Specification](https://www.rssboard.org/rss-specification) to learn
+more about the implementation details.
 
 ## Licensing and Distribution Rights
 
