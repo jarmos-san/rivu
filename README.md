@@ -1,24 +1,36 @@
-# rivu
+# Rivu - Type-Safe RSS 2.0 Feed Generator
 
 [![npm version](https://img.shields.io/npm/v/rivu)](https://www.npmjs.com/package/rivu)
 [![Run tests](https://github.com/jarmos-san/rivu/actions/workflows/run-tests.yml/badge.svg)](https://github.com/jarmos-san/rivu/actions/workflows/run-tests.yml)
 [![QA checks](https://github.com/jarmos-san/rivu/actions/workflows/qa-checks.yml/badge.svg)](https://github.com/jarmos-san/rivu/actions/workflows/qa-checks.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-rivu is a type-safe RSS 2.0 feed generator for TypeScript and JavaScript. You
-describe a channel and its items as plain objects, call `generate()` and get
-back an XML string. There is nothing to configure and one runtime dependency,
-[xmlbuilder2](https://oozcitak.github.io/xmlbuilder2/).
+Rivu is a modern TypeScript library for generating RSS 2.0 feeds
+programmatically. It enforces strict type safety, validates required channel
+metadata and produces a fully compliant RSS feed as an XML document.
 
-## Install
+## Features
+
+Rivu provides the following functionalities:
+
+- 100% RSS 2.0 compliant output.
+- Lightweight and fast (based on Node.js).
+- Fully type-safe using TypeScript interfaces.
+- Strict validation for required RSS channel fields.
+- Custom feed items with rich optional metadata.
+- Small footprint and works in Node.js and other JavaScript runtimes.
+
+## Get Started
+
+Install Rivu with your package manager of choice:
 
 ```bash
 pnpm add rivu
 ```
 
 It also works with `npm install rivu`, `yarn add rivu` and `bun add rivu`.
-
-## Example
+Then describe a channel and its items, call `generate()` and get back an XML
+string:
 
 ```ts
 import { Feed } from "rivu";
@@ -78,25 +90,8 @@ console.log(feed.generate());
 </rss>
 ```
 
-## What it handles for you
-
-- Typed input: `ChannelElements`, `FeedOptions`, `Days`, `Hour` and `RSS` are
-  exported.
-- `Date` values are written as RFC 822 strings.
-- `title` and `description` are always CDATA. Other fields use CDATA when they
-  contain markup and are escaped otherwise.
-- `undefined` and `null` fields are omitted instead of emitted empty.
-- `category` accepts a string or an array and writes one element per entry.
-- `guid` is marked `isPermaLink="true"` for http(s) URLs and `"false"`
-  otherwise.
-- `feedURL` adds an `<atom:link rel="self">` element.
-- `stylesheet` adds an `<?xml-stylesheet?>` instruction, typed `text/css` for
-  `.css` URLs and `text/xsl` otherwise.
-
-## Documentation
-
-The API reference and usage guides live at
-[rivu.jarmos.dev](https://rivu.jarmos.dev).
+For the API reference, more detailed usage guides and the contribution
+guidelines, check out [the official documentation](https://rivu.jarmos.dev).
 
 ## Licensing and Distribution Rights
 
