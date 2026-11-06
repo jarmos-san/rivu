@@ -1,5 +1,10 @@
 # Rivu - Type-Safe RSS 2.0 Feed Generator
 
+[![npm version](https://img.shields.io/npm/v/rivu)](https://www.npmjs.com/package/rivu)
+[![Run tests](https://github.com/jarmos-san/rivu/actions/workflows/run-tests.yml/badge.svg)](https://github.com/jarmos-san/rivu/actions/workflows/run-tests.yml)
+[![QA checks](https://github.com/jarmos-san/rivu/actions/workflows/qa-checks.yml/badge.svg)](https://github.com/jarmos-san/rivu/actions/workflows/qa-checks.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 Rivu is a modern TypeScript library for generating RSS 2.0 feeds
 programmatically. It enforces strict type safety, validates required channel
 metadata and produces a fully compliant RSS feed as an XML document.
