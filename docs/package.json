@@ -13,12 +13,12 @@
     "@nuxt/content": "^3.16.2",
     "@nuxt/icon": "^2.6.2",
     "better-sqlite3": "^13.0.3",
-    "nuxt": "^4.6.3",
+    "nuxt": "^4.6.4",
     "vue": "^3.5.44",
     "vue-router": "^5.4.0"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.3",
-    "tailwindcss": "^4.3.3"
+    "@tailwindcss/vite": "^4.3.4",
+    "tailwindcss": "^4.3.4"
   }
 }
