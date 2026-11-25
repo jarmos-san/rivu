@@ -73,7 +73,7 @@ interface TextInput {
   name: string;
 
   /** @description The URL where the text input form is submitted. */
-  link: URL;
+  link: string | URL;
 }
 
 /**
@@ -207,8 +207,9 @@ interface ChannelElements {
   ttl?: number | null;
 
   /**
-   * @description An image representing the channel (a URL to an image or an
-   * actual `URL` object).
+   * @description The URL of a GIF, JPEG or PNG image representing the channel.
+   * It is serialized as an `<image>` element whose `<title>` and `<link>` reuse
+   * the channel's own `title` and `link`, as the specification recommends.
    */
   image?: URL | string | null;
 
@@ -226,14 +227,14 @@ interface ChannelElements {
    * the feed. It can be useful for managing predictable server load windows or
    * maintenance periods.
    */
-  skipHours?: Hour | null;
+  skipHours?: Hour | Hour[] | null;
 
   /**
    * @description Days of the week during which aggregators should avoid
    * retreiving the feed. It helps publishers avoid unnecessary fetches during
    * predictable no-update days.
    */
-  skipDays?: Days | null;
+  skipDays?: Days | Days[] | null;
 
   /**
    * @description The collection of published entries associated with the
@@ -266,6 +267,18 @@ interface RSS {
   generate: () => string;
 }
 
+/** @description A sub-element nested inside a channel or item element. */
+interface ChildNode {
+  /** @description The name of the sub-element, e.g. `url` or `hour`. */
+  name: string;
+
+  /** @description The value of the sub-element. */
+  value: unknown;
+
+  /** @description Whether to wrap the value in a CDATA section. */
+  cdata?: boolean;
+}
+
 interface BuildNodeOption {
   doc: XMLBuilder;
   name: keyof ChannelElements | keyof ItemElements;
@@ -287,9 +300,11 @@ interface FeedOptions {
 }
 
 export type {
+  TextInput,
   Days,
   Hour,
   BuildNodeOption,
+  ChildNode,
   ItemElements,
   ChannelElements,
   RSS,
